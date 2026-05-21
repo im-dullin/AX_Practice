@@ -19,28 +19,49 @@
 
 ## 설치 (1회)
 
+### Windows (PowerShell 7) ★
+
+```powershell
+python -m pip install sounddevice soundfile numpy faster-whisper
+```
+
+> Claude Code는 별도 설치돼 있어야 합니다 (`claude --version` 확인).
+> 첫 마이크 녹음 시 **설정 → 개인 정보 및 보안 → 마이크 → "데스크톱 앱이 마이크에 액세스하도록 허용"** 토글 ON 필수.
+
+### macOS / Linux
+
 ```bash
 pip install sounddevice soundfile numpy faster-whisper
-# claude CLI는 Claude Code 설치돼 있으면 끝
-# macOS 최초 실행 시 '시스템 설정 → 개인정보보호 → 마이크'에서 터미널 권한 허용
 ```
+
+> macOS는 시스템 설정 → 개인정보 보호 → 마이크에서 터미널 앱 허용 후 ⌘+Q.
 
 ## 실행
 
-```bash
+### Windows (PowerShell) ★
+
+```powershell
 # ★ 회의 시작 — 마이크 녹음 (Enter로 종료)
 python run.py --record
 
 # 기존 녹음 파일 (m4a/mp3/wav)
-python run.py samples/meeting.m4a
+python run.py samples\meeting.m4a
 
 # 즉시 데모용 텍스트
-python run.py samples/sample_transcript.txt
+python run.py samples\sample_transcript.txt
+```
+
+### macOS / Linux
+
+```bash
+python3 run.py --record
+python3 run.py samples/meeting.m4a
+python3 run.py samples/sample_transcript.txt
 ```
 
 녹음본은 `samples/recording_YYYYMMDD_HHMMSS.wav`로 자동 저장, 리포트는 `output/`에 저장되고 기본 브라우저로 자동 오픈.
 
-## 실측 성능 (M-시리즈 Mac · small 모델)
+## 실측 성능 (small 모델 · CPU)
 
 | 입력 | 길이 | 전사 시간 | 요약 시간 | 합계 |
 |---|---|---|---|---|
@@ -61,6 +82,12 @@ python run.py samples/sample_transcript.txt
 
 **시연 직전 사전 다운로드** — 첫 실행 시 모델을 자동 다운로드하므로, 강의 직전 한 번 미리 실행해서 캐시해두세요:
 
+**Windows**:
+```powershell
+python -c "from faster_whisper import WhisperModel; WhisperModel('small', device='cpu', compute_type='int8')"
+```
+
+**macOS / Linux**:
 ```bash
 python3 -c "from faster_whisper import WhisperModel; WhisperModel('small', device='cpu', compute_type='int8')"
 ```
@@ -70,7 +97,7 @@ python3 -c "from faster_whisper import WhisperModel; WhisperModel('small', devic
 1. **전(前) 강의 준비** — `samples/`에 `sample_transcript.txt` 미리 배치
 2. **시연 (6분)**
    - 0:00~1:00 — 입력 파일 보여주기 (회의 전문 / 또는 5분짜리 m4a)
-   - 1:00~2:30 — `python run.py samples/sample_transcript.txt` 실행
+   - 1:00~2:30 — `python run.py samples\sample_transcript.txt` (Windows) 실행
    - 2:30~5:00 — 브라우저 자동 오픈된 리포트 화면 워크스루
      - 핵심 요약 · 액션 아이템 · 결정사항 · 리스크
    - 5:00~6:00 — *"이걸 Day 2 매크로 #6 후보로 등록할 수 있습니다"* 메시지
@@ -100,3 +127,13 @@ python3 -c "from faster_whisper import WhisperModel; WhisperModel('small', devic
 ├── output/                 # 생성된 리포트
 └── README.md
 ```
+
+## 흔히 막히는 곳 (Windows 우선)
+
+| 증상 | 해결 |
+|---|---|
+| `python` 명령이 인식 안 됨 | 새 PowerShell 창 / 설정 → 앱 실행 별칭에서 `python.exe`, `python3.exe` OFF |
+| `PortAudioError` — 마이크 못 잡음 | 설정 → 개인 정보 → 마이크 → ★ ***데스크톱 앱*** 토글 ON 후 PowerShell 재시작 |
+| 한글이 □ 로 표시 | PowerShell 7 사용 (cmd / PS 5.1 X) + `chcp 65001` |
+| `claude` 명령 안 됨 | `claude.cmd` 가 PATH에 있는지 확인. 새 PowerShell 창 |
+| `[WinError 2]` 에러 | 거의 항상 새 PowerShell 창 한 번 열면 해결 |

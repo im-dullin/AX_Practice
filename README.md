@@ -20,18 +20,25 @@
 
 ### Step 1. 환경 세팅 (1회)
 
-자기 OS 가이드 한 번만 통과:
+자기 OS 가이드 한 번만 통과 (수업 수강생 대부분은 Windows):
+- **Windows — [`세팅가이드_Windows.md`](세팅가이드_Windows.md)** ★
 - macOS — [`세팅가이드_macOS.md`](세팅가이드_macOS.md)
-- Windows — [`세팅가이드_Windows.md`](세팅가이드_Windows.md)
 
 ### Step 2. 저장소 클론
 
+**Windows (PowerShell 7)**:
+```powershell
+git clone https://github.com/im-dullin/AX_Practice.git
+cd AX_Practice
+```
+
+**macOS / Linux**:
 ```bash
 git clone https://github.com/im-dullin/AX_Practice.git
 cd AX_Practice
 ```
 
-> 한글 폴더명이라 셸에서 cd 할 때 `Tab` 자동완성 사용 권장.
+> 한글 폴더명이라 셸에서 `cd 01_` 까지 입력 후 `Tab` 키로 자동완성 사용 권장.
 
 ### Step 3. 각 프로젝트 폴더 진입 → 개념 자료 먼저
 
@@ -39,7 +46,7 @@ cd AX_Practice
 
 1. **`concept.md`** 읽기 (5분) — *이게 뭐예요·왜 만들어요·어떻게 동작해요*
 2. **`concept.html`** 열어보기 — 강사 PT 슬라이드 (브라우저로 열기)
-3. **`PROMPT.md`** (또는 `PROMPT_WINDOWS.md`) 를 Claude Code에 붙여넣기
+3. *Windows*는 **`PROMPT_WINDOWS.md`**, *macOS*는 **`PROMPT.md`** 를 Claude Code에 붙여넣기
 4. Claude Code가 시키는 대로 따라가며 *바이브 코딩*
 5. 막히면 *완성본 코드 (`run.py`, `app.py` 등)*와 비교 학습
 6. **`README.md`** 의 검증 절차로 동작 확인

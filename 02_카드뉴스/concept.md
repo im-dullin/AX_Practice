@@ -115,7 +115,7 @@ Playwright가 *눈에 보이지 않는 Chrome*을 띄워 HTML 페이지를 PNG�
 > 비유 — 카탈로그 인쇄. 디자이너가 PSD 하나 만들면 그걸로 1000장 찍어내는 거랑 같음.
 
 ### ③ 웹 UI vs CLI
-이 프로젝트는 둘 다 지원. *비개발자*는 웹 UI (Flask)로 폼 입력, *개발자*는 CLI(`python3 run.py <URL>`). **같은 코드, 두 가지 진입점.**
+이 프로젝트는 둘 다 지원. *비개발자*는 웹 UI (Flask)로 폼 입력, *개발자*는 CLI(`python run.py <URL>` · Windows / `python3 run.py <URL>` · macOS). **같은 코드, 두 가지 진입점.**
 
 ### ④ 비동기 처리 — `async/await`
 Playwright가 페이지 5장을 스크린샷 찍을 때 *동시에 진행*. 그래서 5장이 5초 안에. *기다림을 줄이는* 패턴.

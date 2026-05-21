@@ -26,6 +26,7 @@ Thumbs.db
 
 # 강사 전용 자료 (수강생 미공개)
 강사매뉴얼.md
+**/INSTRUCTOR.md
 
 # 생성된 결과물 (런타임 생성)
 01_회의비서/output/*.html

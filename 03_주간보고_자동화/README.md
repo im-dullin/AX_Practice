@@ -63,25 +63,49 @@ Notion에 페이지 1개를 만들고, **일별 메모를 토글 또는 H2 헤�
 
 ### 1회 셋업
 
-```bash
-# 1. 가상환경 + 의존성
-cd "08_시그니처시연/03_주간보고_자동화"
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+#### Windows (PowerShell 7) ★
+
+```powershell
+# 1. 폴더 진입 + 가상환경 + 의존성
+cd 03_주간보고_자동화
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
 
 # 2. Notion Integration Token 발급
 #    https://www.notion.so/profile/integrations → New integration → Internal
-#    → 토큰 복사 (secret_로 시작)
+#    → 토큰 복사 (ntn_ 또는 secret_ 로 시작)
 
-# 3. .env 만들기
-cp .env.example .env
-# .env 파일 열어서 NOTION_TOKEN=secret_xxx 채워넣기
+# 3. .env 만들기 (수동 또는 복사)
+Copy-Item .env.example .env
+notepad .env       # NOTION_TOKEN=ntn_xxx 로 채워넣기
 
 # 4. Notion 주간보고 페이지 ··· → Connections에 위 Integration 추가
 ```
 
+> PowerShell 실행 정책으로 `.venv\Scripts\Activate.ps1` 이 막히면:
+> `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` 한 번 실행 후 재시도.
+
+#### macOS / Linux
+
+```bash
+cd 03_주간보고_자동화
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+cp .env.example .env
+# .env 파일 열어서 NOTION_TOKEN=ntn_xxx 채워넣기
+```
+
 ### 실행
+
+**Windows**:
+```powershell
+python app.py
+```
+
+**macOS / Linux**:
 ```bash
 python app.py
 ```
@@ -132,13 +156,18 @@ API 키 없이 동작: Claude API 키 대신 `claude -p` 서브프로세스 사�
 
 ---
 
-## 자주 막히는 곳
+## 자주 막히는 곳 (Windows 우선)
 
 | 증상 | 원인 / 해결 |
 |---|---|
-| `Notion API 403` | 페이지를 Integration Connection에 추가하지 않음. 페이지 `···` → Connections에서 명시 추가 |
+| `Activate.ps1 ... cannot be loaded` | PowerShell 실행 정책 — `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` 한 번 실행 후 재시도 |
+| `python` 명령 인식 안 됨 | 새 PowerShell 창 / 설정 → 앱 실행 별칭에서 `python.exe`, `python3.exe` OFF |
+| `[WinError 2]` subprocess | 새 PowerShell 창 열어서 PATH 반영 |
+| 한글이 □ 로 깨짐 | PowerShell 7 + `chcp 65001` + 콘솔 인코딩 영구 설정 |
+| 5000 포트 충돌 | `Get-NetTCPConnection -LocalPort 5000` 로 PID 확인 → 작업 관리자에서 종료 |
+| `Notion API 403` | 페이지를 Integration Connection에 추가 안 함. 페이지 `···` → Connections에서 명시 추가 |
 | `이번 주 메모가 없어요` | 토글 라벨이 `YYYY-MM-DD`로 시작하지 않거나, 모든 토글이 이번 주 범위 밖 |
-| `claude CLI를 찾을 수 없습니다` | Claude Code 설치 또는 `PATH` 확인 |
+| `claude CLI를 찾을 수 없습니다` | Claude Code 설치 또는 `PATH` 확인. Windows는 `claude.cmd` 등록 여부 |
 | (모드 A) Notion 툴 호출 안 됨 | Claude Code 세션 재시작. `claude mcp list`로 Connected 확인 |
 | 같은 주차 재실행 | 모드 A는 자식 페이지 본문 덮어쓰기 (1회 확인). 모드 B는 항상 새 HTML 생성 |
 

@@ -21,17 +21,34 @@ URL 또는 마크다운 한 줄 → **인스타용 카드 5장 PNG 자동 생성
 
 ## 설치 (1회)
 
+### Windows (PowerShell 7) ★
+
+```powershell
+python -m pip install playwright flask
+python -m playwright install chromium
+```
+
+### macOS / Linux
+
 ```bash
 pip install playwright flask
 playwright install chromium
-
-# Firecrawl MCP 등록 (URL 모드 사용 시)
-# 1) https://firecrawl.dev 가입 → 대시보드 → API Keys → 키 복사
-# 2) 터미널(claude 인터랙티브 세션 바깥)에서 — *name을 -e 앞에 두는 게 핵심*:
-claude mcp add firecrawl -e FIRECRAWL_API_KEY=fc-xxxxxxxxxxxx -- npx -y firecrawl-mcp
-# 3) 등록 확인
-claude mcp list   # firecrawl: ... ✓ Connected 가 떠야 OK
 ```
+
+### Firecrawl MCP 서버 등록 (URL 모드 사용 시 · OS 공통)
+
+1. <https://firecrawl.dev> 가입 → 대시보드 → API Keys → 키 복사
+2. 터미널/PowerShell(claude 인터랙티브 세션 바깥)에서 — *name을 `-e` 앞에 두는 게 핵심*:
+
+   ```powershell
+   claude mcp add firecrawl -e FIRECRAWL_API_KEY=fc-xxxxxxxxxxxx -- npx -y firecrawl-mcp
+   ```
+
+3. 등록 확인:
+
+   ```powershell
+   claude mcp list   # firecrawl: ... ✓ Connected 가 떠야 OK
+   ```
 
 오프라인 데모만 할 거면 Firecrawl 가입은 생략 가능.
 
@@ -39,6 +56,12 @@ claude mcp list   # firecrawl: ... ✓ Connected 가 떠야 OK
 
 ### ★ 웹 UI (Recommended · 비개발자 친화)
 
+**Windows**:
+```powershell
+python run.py
+```
+
+**macOS / Linux**:
 ```bash
 python3 run.py
 ```
@@ -54,12 +77,24 @@ python3 run.py
 
 ### CLI · URL 모드 (시연 1줄용)
 
+**Windows**:
+```powershell
+python run.py https://www.example.com/news/article-id
+```
+
+**macOS / Linux**:
 ```bash
 python3 run.py https://www.example.com/news/article-id
 ```
 
 ### CLI · 오프라인 모드 (Firecrawl 없이 데모)
 
+**Windows**:
+```powershell
+python run.py samples\sample_markdown.md
+```
+
+**macOS / Linux**:
 ```bash
 python3 run.py samples/sample_markdown.md
 ```
@@ -72,7 +107,7 @@ python3 run.py samples/sample_markdown.md
 - `<TS>_meta.json` — 메타데이터 (topic·source·cards)
 - `<TS>_index.html` — CLI 모드에서만 (정적 미리보기 시트)
 
-## 실측 성능 (M-시리즈 Mac)
+## 실측 성능
 
 | 입력 | 크롤링 | 분석 | 렌더+스크린샷 | 합계 |
 |---|---|---|---|---|
@@ -91,10 +126,21 @@ python3 run.py samples/sample_markdown.md
 1. **준비** — 시연 직전 sample 마크다운 1개 + Firecrawl MCP 등록 + Playwright 캐시 확보
 2. **시연 (6분)**
    - 0:00~0:30 — 입력 URL 또는 마크다운 보여주기
-   - 0:30~1:00 — `python3 run.py <input>` 실행
+   - 0:30~1:00 — `python run.py <input>` (Windows) / `python3 run.py <input>` (macOS) 실행
    - 1:00~1:30 — 진행 로그 5단계(🕸 📄 🤖 🎨 📸 📋) 흘러가는 동안 해설
    - 1:30~5:00 — 브라우저 자동 오픈된 5장 시트 워크스루
    - 5:00~6:00 — *"Day 2 매크로 #2 후보 — 폰 탭 한 번에 신상 콘텐츠 5장"* 메시지
+
+## 흔히 막히는 곳 (Windows 우선)
+
+| 증상 | 해결 |
+|---|---|
+| `python` 명령이 인식 안 됨 | 새 PowerShell 창 / 설정 → 앱 실행 별칭에서 `python.exe`, `python3.exe` OFF |
+| `claude` 명령 실패 (`[WinError 2]`) | `subprocess.run(..., shell=True)` 가 코드에 들어 있는지 확인. 새 PowerShell 창 |
+| 8765 포트 충돌 | `Get-NetTCPConnection -LocalPort 8765` 로 PID 확인 후 작업 관리자에서 종료 |
+| Defender 방화벽 알림 | *개인 네트워크* 허용 (localhost만 바인딩) |
+| 한글이 □ 로 깨짐 | PowerShell 7 + `chcp 65001` + 콘솔 인코딩 영구 설정 |
+| Firecrawl 등록 실패 | name이 `-e` 앞에 있는지 (`add firecrawl -e KEY=... -- npx ...`) |
 
 ## 파일 구조
 
