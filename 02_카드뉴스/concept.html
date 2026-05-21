@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>카드뉴스 자동 제작 — 프로젝트 개념</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<style>
+:root {
+  --paper: #F5F1E8;
+  --paper-2: #ECE5D3;
+  --ink: #1A1A1A;
+  --ink-2: #4A4540;
+  --ink-3: #8A8479;
+  --accent: #7A2E2E;
+  --gold: #C9A86E;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { background: var(--paper-2); color: var(--ink); }
+body {
+  font-family: 'Pretendard', -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-feature-settings: "ss01", "tnum";
+  -webkit-font-smoothing: antialiased;
+  padding: 40px 0;
+}
+.deck { display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.slide {
+  width: 1280px; height: 720px;
+  background: var(--paper);
+  position: relative; overflow: hidden;
+  box-shadow: 0 2px 20px rgba(26,26,26,0.08);
+}
+.frame { padding: 56px 72px 48px; height: 100%; display: flex; flex-direction: column; }
+.meta-top, .meta-bot {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink-2); font-weight: 600;
+}
+.meta-top { padding-bottom: 12px; border-bottom: 2px solid var(--ink); }
+.meta-bot { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--paper-2); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; }
+
+.slide.hero .center { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.h-eyebrow { font-size: 13px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 18px; }
+.h-rule { width: 80px; height: 4px; background: var(--accent); margin-bottom: 36px; }
+.slide.hero h1 { font-size: 84px; font-weight: 800; letter-spacing: -0.035em; line-height: 1.1; margin-bottom: 26px; word-break: keep-all; }
+.h-sub { font-size: 24px; line-height: 1.55; color: var(--ink-2); word-break: keep-all; max-width: 900px; }
+.h-tag { display: inline-block; margin-top: 32px; padding: 10px 18px; background: var(--ink); color: var(--paper); font-size: 13px; letter-spacing: 0.12em; font-weight: 700; }
+
+.slide.content .head { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 24px; margin-bottom: 28px; }
+.head h2 { font-size: 44px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 8px; word-break: keep-all; }
+.h-lead { font-size: 17px; color: var(--ink-2); line-height: 1.5; max-width: 800px; }
+.big-num { font-size: 68px; font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -0.03em; }
+.big-cap { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; text-align: right; margin-top: 6px; }
+
+.flow { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; }
+.flow-step {
+  display: flex; align-items: center; gap: 22px;
+  padding: 16px 26px; background: var(--paper-2); border-radius: 6px;
+  width: 760px; max-width: 100%;
+}
+.flow-step.mcp { background: var(--ink); color: var(--paper); border-left: 5px solid var(--gold); }
+.flow-step.mcp .label .t { color: var(--paper); }
+.flow-step.mcp .label .d { color: rgba(245,241,232,0.7); }
+.flow-step.mcp .icon { color: var(--gold); }
+.flow-step .icon { font-size: 32px; line-height: 1; }
+.flow-step .label { flex: 1; }
+.flow-step .label .t { font-size: 17px; font-weight: 700; color: var(--ink); }
+.flow-step .label .d { font-size: 13px; color: var(--ink-2); margin-top: 4px; }
+.flow-arrow { font-size: 16px; color: var(--accent); font-weight: 800; }
+
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; flex: 1; align-content: start; }
+.card { background: var(--paper-2); padding: 22px; border-radius: 6px; display: flex; flex-direction: column; }
+.card.dark { background: var(--ink); color: var(--paper); }
+.card .role { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 10px; }
+.card.dark .role { color: var(--gold); }
+.card .name { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 8px; }
+.card.dark .name { color: var(--paper); }
+.card .note { font-size: 13px; line-height: 1.55; color: var(--ink-2); word-break: keep-all; }
+.card.dark .note { color: rgba(245,241,232,0.75); }
+
+.concepts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 28px; flex: 1; align-content: start; }
+.concept-item { display: flex; gap: 16px; align-items: flex-start; }
+.concept-item .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; min-width: 44px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.concept-item .body .t { font-size: 18px; font-weight: 800; line-height: 1.25; margin-bottom: 6px; word-break: keep-all; }
+.concept-item .body .d { font-size: 13px; line-height: 1.55; color: var(--ink-2); word-break: keep-all; }
+
+/* MCP big concept slide */
+.mcp-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-content: center; }
+.mcp-col h3 { font-size: 28px; font-weight: 800; margin-bottom: 14px; letter-spacing: -0.02em; word-break: keep-all; }
+.mcp-col .lead { font-size: 14px; line-height: 1.6; color: var(--ink-2); margin-bottom: 18px; word-break: keep-all; }
+.mcp-compare { background: var(--paper-2); padding: 20px; border-radius: 6px; font-size: 14px; line-height: 1.7; }
+.mcp-compare strong { color: var(--accent); }
+.mcp-compare code { font-family: "SF Mono", "Menlo", monospace; background: var(--paper); padding: 2px 6px; border-radius: 2px; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="deck">
+
+<!-- Slide 1 · Cover -->
+<section class="slide hero">
+  <div class="frame">
+    <div class="meta-top">
+      <span>Project ② · Card News Auto-builder</span>
+      <span>Concept Brief · 01 / 06</span>
+    </div>
+    <div class="center">
+      <div class="h-eyebrow">Project Concept Brief · MCP Server First Use</div>
+      <div class="h-rule"></div>
+      <h1>카드뉴스 자동 제작.<br>URL 한 줄 → 5장 PNG.</h1>
+      <p class="h-sub">기사 URL을 넣으면 *핫이슈*를 분석해 인스타용 카드 5장(1080×1080)을 자동으로. **세 프로젝트 중 처음으로 MCP 서버를 도입**하는 회차.</p>
+      <div class="h-tag">★ Firecrawl MCP 서버 · 6 단계 · 디자이너 없이</div>
+    </div>
+    <div class="meta-bot"><span>Project ② · Concept</span><span>01 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 2 · 어떤 문제 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top"><span>What problem?</span><span>02 / 06</span></div>
+    <div class="head">
+      <div>
+        <h2>어떤 문제를 풀어요?</h2>
+        <div class="h-lead">마케팅·홍보가 *지속*되지 않는 진짜 이유는 *디자인 사이클*에 있어요.</div>
+      </div>
+      <div><div class="big-num">3</div><div class="big-cap">반복 문제</div></div>
+    </div>
+    <div class="cards" style="grid-template-rows: 1fr;">
+      <div class="card">
+        <div class="role">문제 ①</div>
+        <div class="name">기사 → 우리 톤 재구성</div>
+        <div class="note">흥미로운 기사를 봐도, 그걸 *우리 회사 톤*으로 다시 정리하려면 한 시간.</div>
+      </div>
+      <div class="card">
+        <div class="role">문제 ②</div>
+        <div class="name">디자이너 의뢰 → 3일</div>
+        <div class="note">부탁 → 검수 → 수정 → 재검수. 이렇게 3일. 그 사이 이슈는 식어버린다.</div>
+      </div>
+      <div class="card">
+        <div class="role">문제 ③</div>
+        <div class="name">지속이 안 됨</div>
+        <div class="note">인스타는 *지속*이 핵심인데, 매번 사람 손이 필요하니 *지속이 안 된다*.</div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ② · Concept</span><span>02 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 3 · 동작 흐름 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top"><span>How it works · 6 stages</span><span>03 / 06</span></div>
+    <div class="head">
+      <div>
+        <h2>어떻게 동작해요?</h2>
+        <div class="h-lead">사람이 손대는 건 *URL 입력*과 *ZIP 다운로드* 두 번뿐.</div>
+      </div>
+      <div><div class="big-num">6</div><div class="big-cap">자동 단계</div></div>
+    </div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="icon">🌐</div>
+        <div class="label"><div class="t">웹 UI에 URL 한 줄 입력</div><div class="d">Flask 폼 + 로딩 스피너</div></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-step mcp">
+        <div class="icon">🕸</div>
+        <div class="label"><div class="t">★ Firecrawl MCP 서버 → 본문 추출</div><div class="d">광고·메뉴·푸터 제거된 깨끗한 마크다운 (이 단계가 MCP 첫 경험)</div></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-step">
+        <div class="icon">🧠</div>
+        <div class="label"><div class="t">Claude — 핫이슈 3개 + 카드 5장 설계</div><div class="d">cover · body × 3 · outro JSON 출력</div></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-step">
+        <div class="icon">🎨</div>
+        <div class="label"><div class="t">Playwright 헤드리스 브라우저 → PNG 5장</div><div class="d">1080×1080 @2x · 비동기 처리</div></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-step">
+        <div class="icon">📥</div>
+        <div class="label"><div class="t">ZIP 묶음 + 결과 페이지 자동 오픈</div><div class="d">5장 한 번에 다운로드 → 인스타 업로드</div></div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ② · Concept</span><span>03 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 4 · ★ MCP 서버 무엇인가 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top"><span>★ Core concept · MCP server</span><span>04 / 06</span></div>
+    <div class="head">
+      <div>
+        <h2>MCP 서버가 뭐예요?</h2>
+        <div class="h-lead">이 프로젝트의 *진짜 학습 포인트*. AI에게 *외부 기관*을 이식하는 표준.</div>
+      </div>
+      <div><div class="big-num">★</div><div class="big-cap">Key concept</div></div>
+    </div>
+    <div class="mcp-grid">
+      <div class="mcp-col">
+        <h3>비유 — AI의 USB-C</h3>
+        <p class="lead">옛날엔 폰마다 충전 단자가 달랐어요 (5핀·8핀·Lightning). USB-C로 통일된 후 *케이블 하나*면 다 됨. AI도 똑같이 *MCP*로 통일됨 (2024.11 Anthropic 발표 → 2026년 OpenAI·Google·MS·AWS 모두 채택).</p>
+        <div class="mcp-compare">
+          <strong>MCP</strong> = 표준 (규약)<br>
+          <strong>MCP 서버</strong> = 그 표준을 따라 실제로 일하는 도구<br>
+          ↳ <code>Firecrawl MCP 서버</code> = 웹 본문 추출 도구
+        </div>
+      </div>
+      <div class="mcp-col">
+        <h3>없으면? vs 있으면?</h3>
+        <p class="lead">Firecrawl을 *MCP 없이 직접* 쓰려면 — REST 문서 읽고, requests.get 코드 짜고, API 키 환경변수 관리, 응답 파싱, 에러 핸들링... 한 시간.</p>
+        <div class="mcp-compare">
+          <strong>MCP 서버 있으면:</strong><br>
+          <code>claude -p "이 URL을 firecrawl_scrape로"<br>--allowedTools mcp__firecrawl__firecrawl_scrape</code><br>
+          한 줄 끝. 코드 50줄 → 1줄.
+        </div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ② · Concept · MCP first</span><span>04 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 5 · 핵심 개념 5가지 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top"><span>5 concepts you learn</span><span>05 / 06</span></div>
+    <div class="head">
+      <div>
+        <h2>핵심 개념 5가지.</h2>
+        <div class="h-lead">만들면서 손으로 익히는 *AI 시대 자동화 기본기*.</div>
+      </div>
+      <div><div class="big-num">05</div><div class="big-cap">Core</div></div>
+    </div>
+    <div class="concepts">
+      <div class="concept-item">
+        <div class="num">01</div>
+        <div class="body">
+          <div class="t">★ MCP 서버 등록과 호출</div>
+          <div class="d"><code>claude mcp add</code> 한 줄로 새 도구 장착. *AI에 외부 기관 이식*. 이 프로젝트 핵심.</div>
+        </div>
+      </div>
+      <div class="concept-item">
+        <div class="num">02</div>
+        <div class="body">
+          <div class="t">헤드리스 브라우저</div>
+          <div class="d">Playwright가 *눈에 안 보이는 Chrome*을 띄워 HTML → PNG. 디자인을 코드로.</div>
+        </div>
+      </div>
+      <div class="concept-item">
+        <div class="num">03</div>
+        <div class="body">
+          <div class="t">웹 UI vs CLI 둘 다</div>
+          <div class="d">비개발자는 Flask 웹 폼, 개발자는 CLI. *같은 코드 두 진입점*.</div>
+        </div>
+      </div>
+      <div class="concept-item">
+        <div class="num">04</div>
+        <div class="body">
+          <div class="t">비동기 처리 (async/await)</div>
+          <div class="d">PNG 5장을 *동시에* 찍어 5초 안에. 기다림을 줄이는 패턴.</div>
+        </div>
+      </div>
+      <div class="concept-item">
+        <div class="num">05</div>
+        <div class="body">
+          <div class="t">UX의 마지막 한 발</div>
+          <div class="d">5장 따로 vs ZIP 한 묶음. *작은 디테일*이 *실제 사용*을 가른다.</div>
+        </div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ② · Concept</span><span>05 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 6 · 솔직한 단점 + 응용 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top"><span>Trade-offs and next steps</span><span>06 / 06</span></div>
+    <div class="head">
+      <div>
+        <h2>MCP의 *솔직한* 단점도.</h2>
+        <div class="h-lead">강의에서 잘 안 다루는 *현실의 트레이드오프* — 알아야 *옳게* 쓴다.</div>
+      </div>
+      <div><div class="big-num">3</div><div class="big-cap">단점</div></div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="role">단점 ①</div>
+        <div class="name">지연 (Latency)</div>
+        <div class="note">REST 직접 100ms → MCP 1~3초. Claude가 중간에 끼니까. *대량 호출*엔 부적합.</div>
+      </div>
+      <div class="card">
+        <div class="role">단점 ②</div>
+        <div class="name">디버깅 한 단계 ↑</div>
+        <div class="note">실패하면 어디 막혔는지 *Claude 응답 + MCP 로그* 둘 다 확인.</div>
+      </div>
+      <div class="card">
+        <div class="role">단점 ③</div>
+        <div class="name">초기 등록 비용</div>
+        <div class="note">가입 + 키 발급 + <code style="font-family:'SF Mono',monospace;background:var(--paper);padding:1px 5px;font-size:11px">claude mcp add</code> 한 번. 일회성 사용엔 오버.</div>
+      </div>
+      <div class="card dark">
+        <div class="role">실무 응용 ①</div>
+        <div class="name">자기 회사 블로그 URL</div>
+        <div class="note">사내 보도자료 / 블로그 단건 → 5장 카드 자동. 마케팅팀 즉시 사용.</div>
+      </div>
+      <div class="card">
+        <div class="role">실무 응용 ②</div>
+        <div class="name">Instagram Graph API</div>
+        <div class="note">PNG 5장 → 인스타 자동 임시저장. 사람은 *검수만*.</div>
+      </div>
+      <div class="card">
+        <div class="role">Next</div>
+        <div class="name">Project ③ 주간보고</div>
+        <div class="note">이제 *MCP 없이* REST API 직접 호출. MCP와 비교 학습.</div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ② · Concept · Next ③</span><span>06 / 06</span></div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

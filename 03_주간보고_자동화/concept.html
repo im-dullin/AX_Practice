@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>주간보고 자동화 — 프로젝트 개념</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<style>
+:root {
+  --paper: #F5F1E8;
+  --paper-2: #ECE5D3;
+  --ink: #1A1A1A;
+  --ink-2: #4A4540;
+  --ink-3: #8A8479;
+  --accent: #7A2E2E;
+  --gold: #C9A86E;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { background: var(--paper-2); color: var(--ink); }
+body {
+  font-family: 'Pretendard', -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-feature-settings: "ss01", "tnum";
+  -webkit-font-smoothing: antialiased;
+  padding: 40px 0;
+}
+.deck { display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.slide {
+  width: 1280px; height: 720px;
+  background: var(--paper);
+  position: relative; overflow: hidden;
+  box-shadow: 0 2px 20px rgba(26,26,26,0.08);
+}
+.frame { padding: 56px 72px 48px; height: 100%; display: flex; flex-direction: column; }
+.meta-top, .meta-bot {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink-2); font-weight: 600;
+}
+.meta-top { padding-bottom: 12px; border-bottom: 2px solid var(--ink); }
+.meta-bot { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--paper-2); font-size: 10px; color: var(--ink-3); letter-spacing: 0.18em; }
+
+.slide.hero .center { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.h-eyebrow { font-size: 13px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 18px; }
+.h-rule { width: 80px; height: 4px; background: var(--accent); margin-bottom: 36px; }
+.slide.hero h1 { font-size: 76px; font-weight: 800; letter-spacing: -0.035em; line-height: 1.1; margin-bottom: 26px; word-break: keep-all; }
+.h-sub { font-size: 22px; line-height: 1.55; color: var(--ink-2); word-break: keep-all; max-width: 980px; }
+.h-tag { display: inline-block; margin-top: 32px; padding: 10px 18px; background: var(--ink); color: var(--paper); font-size: 13px; letter-spacing: 0.12em; font-weight: 700; }
+.h-quote { font-size: 36px; font-weight: 800; color: var(--accent); margin-top: 28px; letter-spacing: -0.02em; word-break: keep-all; }
+
+.slide.content .head { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 24px; margin-bottom: 28px; }
+.head h2 { font-size: 44px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 8px; word-break: keep-all; }
+.h-lead { font-size: 17px; color: var(--ink-2); line-height: 1.5; max-width: 800px; }
+.big-num { font-size: 68px; font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -0.03em; }
+.big-cap { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; text-align: right; margin-top: 6px; }
+
+.flow { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; }
+.flow-step {
+  display: flex; align-items: center; gap: 22px;
+  padding: 14px 24px; background: var(--paper-2); border-radius: 6px;
+  width: 780px; max-width: 100%;
+}
+.flow-step.highlight { background: var(--ink); color: var(--paper); border-left: 5px solid var(--gold); }
+.flow-step.highlight .label .t { color: var(--paper); }
+.flow-step.highlight .label .d { color: rgba(245,241,232,0.7); }
+.flow-step .icon { font-size: 30px; line-height: 1; }
+.flow-step .label { flex: 1; }
+.flow-step .label .t { font-size: 16px; font-weight: 700; color: var(--ink); }
+.flow-step .label .d { font-size: 12px; color: var(--ink-2); margin-top: 3px; }
+.flow-arrow { font-size: 14px; color: var(--accent); font-weight: 800; }
+
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; flex: 1; align-content: start; }
+.card { background: var(--paper-2); padding: 22px; border-radius: 6px; display: flex; flex-direction: column; }
+.card.dark { background: var(--ink); color: var(--paper); }
+.card .role { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 10px; }
+.card.dark .role { color: var(--gold); }
+.card .name { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 8px; }
+.card.dark .name { color: var(--paper); }
+.card .note { font-size: 13px; line-height: 1.55; color: var(--ink-2); word-break: keep-all; }
+.card.dark .note { color: rgba(245,241,232,0.75); }
+
+.concepts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 28px; flex: 1; align-content: start; }
+.concept-item { display: flex; gap: 16px; align-items: flex-start; }
+.concept-item .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; min-width: 44px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.concept-item .body .t { font-size: 18px; font-weight: 800; line-height: 1.25; margin-bottom: 6px; word-break: keep-all; }
+.concept-item .body .d { font-size: 13px; line-height: 1.55; color: var(--ink-2); word-break: keep-all; }
+
+/* Comparison slide */
+.compare-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-content: stretch; }
+.compare-col {
+  background: var(--paper-2);
+  padding: 28px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+}
+.compare-col.alt {
+  background: var(--ink);
+  color: var(--paper);
+}
+.compare-col .lbl { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); font-weight: 800; margin-bottom: 10px; }
+.compare-col.alt .lbl { color: var(--gold); }
+.compare-col h3 { font-size: 26px; font-weight: 800; margin-bottom: 14px; line-height: 1.2; letter-spacing: -0.02em; word-break: keep-all; }
+.compare-col .code {
+  font-family: "SF Mono", "Menlo", monospace;
+  font-size: 12px;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 14px 16px;
+  border-radius: 4px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  white-space: pre;
+  overflow-x: auto;
+}
+.compare-col.alt .code { background: rgba(0,0,0,0.4); color: rgba(245,241,232,0.9); }
+.compare-col .summary { font-size: 13px; line-height: 1.55; word-break: keep-all; }
+.compare-col.alt .summary { color: rgba(245,241,232,0.85); }
+
+.compare-table { flex: 1; display: flex; flex-direction: column; gap: 6px; margin-top: 18px; }
+.compare-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: 16px;
+  padding: 12px 16px;
+  background: var(--paper-2);
+  border-radius: 4px;
+  font-size: 14px;
+  align-items: center;
+}
+.compare-row .lbl { font-weight: 700; color: var(--ink); font-size: 13px; }
+.compare-row .a { color: var(--ink-2); }
+.compare-row .b { color: var(--accent); font-weight: 600; }
+.compare-row.head {
+  background: var(--ink); color: var(--paper);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 10px 16px;
+}
+.compare-row.head .a, .compare-row.head .b { color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="deck">
+
+<!-- Slide 1 · Cover -->
+<section class="slide hero">
+  <div class="frame">
+    <div class="meta-top">
+      <span>Project ③ · Weekly Report Auto</span>
+      <span>Concept Brief · 01 / 06</span>
+    </div>
+    <div class="center">
+      <div class="h-eyebrow">Project Concept Brief · MCP vs REST</div>
+      <div class="h-rule"></div>
+      <h1>주간보고 자동화.<br>Notion → 보고서.</h1>
+      <p class="h-sub">평일에는 *일별 토글*만 적고, 일요일 밤 URL 입력 한 번으로 *7섹션 구조화 주간 보고서*. 카드뉴스의 *MCP 서버*와 달리, 이번엔 **REST API를 직접 호출**합니다.</p>
+      <div class="h-quote">"월요일 1h 30m → 일요일 5초"</div>
+    </div>
+    <div class="meta-bot"><span>Project ③ · Concept</span><span>01 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 2 · 어떤 문제 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top"><span>What problem?</span><span>02 / 06</span></div>
+    <div class="head">
+      <div>
+        <h2>왜 주간보고가 *항상* 미뤄지나요?</h2>
+        <div class="h-lead">모두가 하지만 모두가 미루는 일 — 본질은 *기억 재구성 비용*.</div>
+      </div>
+      <div><div class="big-num">3</div><div class="big-cap">진짜 이유</div></div>
+    </div>
+    <div class="cards" style="grid-template-rows: 1fr;">
+      <div class="card">
+        <div class="role">이유 ①</div>
+        <div class="name">기억 재구성 1시간</div>
+        <div class="note">일요일 밤 *이번 주에 뭐 했지...* 부터 시작. 정작 일은 5분이면 끝나는데 *기억해내기*에 한 시간.</div>
+      </div>
+      <div class="card">
+        <div class="role">이유 ②</div>
+        <div class="name">결정·리스크 누락</div>
+        <div class="note">활동만 적고 *결정사항·다음 주 계획·리스크*는 매번 빠뜨림. 정작 *상사가 원하는 정보*가 그건데.</div>
+      </div>
+      <div class="card">
+        <div class="role">이유 ③</div>
+        <div class="name">매번 들쭉날쭉</div>
+        <div class="note">바쁜 주는 *3줄*, 여유 있는 주는 *3페이지*. 보는 사람도 *어디를 봐야 할지* 모름.</div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ③ · Concept</span><span>02 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 3 · 동작 흐름 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top"><span>How it works · 7 stages</span><span>03 / 06</span></div>
+    <div class="head">
+      <div>
+        <h2>어떻게 동작해요?</h2>
+        <div class="h-lead">평일엔 *일별 토글*만, 일요일엔 *URL 한 번*. 사람이 손대는 건 그게 전부.</div>
+      </div>
+      <div><div class="big-num">7</div><div class="big-cap">자동 단계</div></div>
+    </div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="icon">✏️</div>
+        <div class="label"><div class="t">평일 — Notion에 일별 토글 메모</div><div class="d">자유 형식 (불릿/체크박스/표 다 OK)</div></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-step">
+        <div class="icon">🌐</div>
+        <div class="label"><div class="t">일요일 — 웹 UI에 Notion URL 입력</div><div class="d">Flask 폼 + 기준일 자동 (이번 주)</div></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-step highlight">
+        <div class="icon">📡</div>
+        <div class="label"><div class="t">★ Notion REST API 직접 호출 (← MCP 비교 포인트)</div><div class="d">requests.get + Bearer 토큰 — 카드뉴스의 MCP와 다른 접근</div></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-step">
+        <div class="icon">🔍</div>
+        <div class="label"><div class="t">이번 주 토글만 필터링 (재귀 처리)</div><div class="d">Notion은 블록 안에 블록 — 마트료시카 구조</div></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-step">
+        <div class="icon">🧠</div>
+        <div class="label"><div class="t">Claude — 7섹션 구조화 + 가드레일</div><div class="d">BEFORE · PROGRESS · DECISIONS · LESSONS · NEXT · ASKS · RISKS</div></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-step">
+        <div class="icon">🎨</div>
+        <div class="label"><div class="t">Jinja2 HTML 템플릿 → 보고서 자동 오픈</div><div class="d">output 폴더에도 영구 저장 (인쇄/PDF 변환 가능)</div></div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ③ · Concept</span><span>03 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 4 · ★ MCP vs REST 비교 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top"><span>★ Core · MCP vs REST direct</span><span>04 / 06</span></div>
+    <div class="head">
+      <div>
+        <h2>MCP 서버 vs REST API 직접.</h2>
+        <div class="h-lead">카드뉴스에선 MCP, 이번엔 REST 직접. *둘 다 알아야 옳게 쓴다*.</div>
+      </div>
+      <div><div class="big-num">★</div><div class="big-cap">Compare</div></div>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-col">
+        <div class="lbl">Project ② · 카드뉴스</div>
+        <h3>MCP 서버 사용 (Firecrawl)</h3>
+        <div class="code">subprocess.run([
+  "claude", "-p",
+  "이 URL 가져와줘",
+  "--allowedTools",
+  "mcp__firecrawl__firecrawl_scrape"
+])</div>
+        <div class="summary">Claude가 알아서 처리. <strong>우리 코드 1줄</strong> · 응답 1~3초 · 디버깅은 한 단계 ↑</div>
+      </div>
+      <div class="compare-col alt">
+        <div class="lbl">Project ③ · 주간보고</div>
+        <h3>REST API 직접 (Notion)</h3>
+        <div class="code">headers = {
+  "Authorization": f"Bearer {TOKEN}",
+  "Notion-Version": "2022-06-28"
+}
+r = requests.get(
+  f"https://api.notion.com/v1/...",
+  headers=headers)
+data = r.json()
+# 재귀 fetch + 페이지네이션 + 에러</div>
+        <div class="summary">우리 코드가 직접 다룸. <strong>50줄+</strong> · 응답 0.1초 · 디버깅 한 곳만 · 완전한 제어</div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ③ · Compare</span><span>04 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 5 · 핵심 개념 5가지 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top"><span>5 concepts you learn</span><span>05 / 06</span></div>
+    <div class="head">
+      <div>
+        <h2>핵심 개념 5가지.</h2>
+        <div class="h-lead">만들면서 손으로 익히는 *실무 자동화 표준 패턴*.</div>
+      </div>
+      <div><div class="big-num">05</div><div class="big-cap">Core</div></div>
+    </div>
+    <div class="concepts">
+      <div class="concept-item">
+        <div class="num">01</div>
+        <div class="body">
+          <div class="t">★ REST API 직접 호출</div>
+          <div class="d">HTTP 요청 → JSON 응답. *인터넷의 가장 기본*. requests 한 줄. MCP의 반대편.</div>
+        </div>
+      </div>
+      <div class="concept-item">
+        <div class="num">02</div>
+        <div class="body">
+          <div class="t">인증 토큰 (.env)</div>
+          <div class="d">코드에 토큰 박지 않기. python-dotenv로 코드 밖 보관 — 보안 기본기.</div>
+        </div>
+      </div>
+      <div class="concept-item">
+        <div class="num">03</div>
+        <div class="body">
+          <div class="t">재귀 처리 (마트료시카)</div>
+          <div class="d">Notion 블록 안의 블록 안의 블록... *같은 동작을 반복*하는 함수 패턴.</div>
+        </div>
+      </div>
+      <div class="concept-item">
+        <div class="num">04</div>
+        <div class="body">
+          <div class="t">Jinja2 템플릿 엔진</div>
+          <div class="d">str.format보다 강력 — {% for %} 반복 + {% if %} 분기. Flask 표준.</div>
+        </div>
+      </div>
+      <div class="concept-item">
+        <div class="num">05</div>
+        <div class="body">
+          <div class="t">AI 가드레일 — 환각 방지</div>
+          <div class="d">"원문에 없는 사실 만들지 마라" 강제. 모호하면 (확인 필요) 라벨. 회사 보고서엔 사실 정확성 = 생명.</div>
+        </div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ③ · Concept</span><span>05 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 6 · MCP vs REST 결정 매트릭스 + 응용 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top"><span>Decision matrix and applications</span><span>06 / 06</span></div>
+    <div class="head">
+      <div>
+        <h2>언제 무엇을 쓸까?</h2>
+        <div class="h-lead">강의에서 잘 안 다루는 *실무 결정 기준*.</div>
+      </div>
+      <div><div class="big-num">06</div><div class="big-cap">Apply</div></div>
+    </div>
+    <div class="compare-table">
+      <div class="compare-row head">
+        <div class="lbl">기준</div>
+        <div class="a">MCP 서버</div>
+        <div class="b">REST 직접</div>
+      </div>
+      <div class="compare-row">
+        <div class="lbl">코드 양</div>
+        <div class="a">1 줄</div>
+        <div class="b">50 줄+</div>
+      </div>
+      <div class="compare-row">
+        <div class="lbl">응답 속도</div>
+        <div class="a">1~3 초</div>
+        <div class="b">0.1 초</div>
+      </div>
+      <div class="compare-row">
+        <div class="lbl">대량 호출 (1만 건+)</div>
+        <div class="a">부적합</div>
+        <div class="b">적합</div>
+      </div>
+      <div class="compare-row">
+        <div class="lbl">여러 AI에서 공유</div>
+        <div class="a">유리</div>
+        <div class="b">각자 따로</div>
+      </div>
+      <div class="compare-row">
+        <div class="lbl">세밀한 제어 (헤더 · 페이징 · 재시도)</div>
+        <div class="a">제한적</div>
+        <div class="b">완전 자유</div>
+      </div>
+      <div class="compare-row">
+        <div class="lbl">초기 학습 비용</div>
+        <div class="a">낮음</div>
+        <div class="b">중간</div>
+      </div>
+      <div class="compare-row">
+        <div class="lbl">디버깅 난이도</div>
+        <div class="a">한 단계 ↑</div>
+        <div class="b">한 곳만</div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ③ · Concept · End</span><span>06 / 06</span></div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

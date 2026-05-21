@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>주간보고</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #ffffff;
+    --fg: #0a0a0a;
+    --fg-soft: #525252;
+    --fg-muted: #a3a3a3;
+    --line: #ececea;
+    --line-strong: #d4d4d2;
+    --error: #b91c1c;
+    --error-bg: #fef2f2;
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+                 system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-feature-settings: "ss01", "cv01";
+  }
+
+  main {
+    flex: 1;
+    max-width: 560px;
+    width: 100%;
+    margin: 0 auto;
+    padding: clamp(4rem, 12vh, 8rem) 2rem 4rem;
+  }
+
+  .eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    font-weight: 500;
+    margin: 0 0 1.25rem;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 5vw, 3.2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0 0 1.25rem;
+  }
+
+  .lede {
+    font-size: 1.05rem;
+    color: var(--fg-soft);
+    margin: 0 0 3.5rem;
+    max-width: 32em;
+    line-height: 1.65;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .field label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--fg-soft);
+    letter-spacing: 0.02em;
+  }
+
+  .field input {
+    width: 100%;
+    padding: 0.65rem 0;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--fg);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line-strong);
+    border-radius: 0;
+    transition: border-color 0.25s var(--ease);
+    appearance: none;
+  }
+
+  .field input::placeholder { color: var(--fg-muted); }
+  .field input:focus {
+    outline: none;
+    border-bottom-color: var(--fg);
+  }
+  .field input:focus + .field-hint { color: var(--fg-soft); }
+
+  .field-hint {
+    font-size: 0.78rem;
+    color: var(--fg-muted);
+    transition: color 0.25s var(--ease);
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 1rem;
+  }
+
+  button {
+    background: var(--fg);
+    color: var(--bg);
+    border: none;
+    padding: 0.85rem 1.5rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+    font-family: inherit;
+    letter-spacing: 0.01em;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.2s var(--ease), background 0.2s var(--ease);
+  }
+
+  button:hover {
+    background: #2a2a2a;
+    transform: translateY(-1px);
+  }
+
+  button:active { transform: translateY(0); }
+
+  .error {
+    margin: 2rem 0 0;
+    padding: 1rem 1.25rem;
+    background: var(--error-bg);
+    color: var(--error);
+    border-left: 2px solid var(--error);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  details.help {
+    margin-top: 5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+    color: var(--fg-soft);
+  }
+
+  details.help summary {
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--fg-soft);
+    list-style: none;
+    user-select: none;
+    transition: color 0.2s var(--ease);
+  }
+
+  details.help summary::-webkit-details-marker { display: none; }
+  details.help summary::after {
+    content: " →";
+    color: var(--fg-muted);
+    transition: transform 0.2s var(--ease);
+    display: inline-block;
+  }
+  details.help[open] summary::after { content: " ↓"; }
+  details.help summary:hover { color: var(--fg); }
+
+  details.help ol {
+    margin: 1.5rem 0 0;
+    padding-left: 1.25rem;
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+
+  details.help li { margin-bottom: 0.4rem; }
+  details.help li::marker { color: var(--fg-muted); }
+
+  details.help code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.82em;
+    background: var(--surface);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+    color: var(--fg);
+  }
+
+  details.help a {
+    color: var(--fg);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--line-strong);
+    transition: text-decoration-color 0.2s var(--ease);
+  }
+  details.help a:hover { text-decoration-color: var(--fg); }
+
+  footer {
+    padding: 2rem;
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--fg-muted);
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── Loading overlay ─────────────────────────────── */
+  #loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s var(--ease);
+    z-index: 1000;
+  }
+  #loading-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .loading-content {
+    width: 100%;
+    max-width: 420px;
+    padding: 2rem;
+    text-align: center;
+  }
+  .loading-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+  .loading-headline {
+    font-size: clamp(1.4rem, 3.5vw, 1.75rem);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.35;
+    color: var(--fg);
+    margin: 0 0 3rem;
+  }
+  .progress {
+    height: 2px;
+    background: var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .progress-bar {
+    height: 100%;
+    width: 0;
+    background: var(--fg);
+    transition: width 0.6s var(--ease);
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .progress-step {
+    font-size: 0.88rem;
+    color: var(--fg-soft);
+    letter-spacing: 0.01em;
+    text-align: left;
+    flex: 1;
+  }
+  .progress-pct {
+    font-size: 0.78rem;
+    color: var(--fg-muted);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+  .progress-elapsed {
+    margin-top: 2rem;
+    font-size: 0.72rem;
+    color: var(--fg-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Weekly Report</p>
+  <h1>한 주를<br>한 페이지로.</h1>
+  <p class="lede">Notion에 적은 일별 메모를 모아 BEFORE · PROGRESS · NEXT · RISK 구조의 보고서로 자동 정리합니다.</p>
+
+  {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+  <form action="/generate" method="post" id="report-form">
+    <div class="field">
+      <label for="url">Notion 페이지 URL</label>
+      <input type="url" id="url" name="url" required
+             placeholder="https://www.notion.so/…"
+             value="{{ url or '' }}">
+    </div>
+
+    <div class="field">
+      <label for="ref_date">기준일</label>
+      <input type="date" id="ref_date" name="ref_date">
+      <span class="field-hint">비워두면 오늘 기준. 해당 날짜가 속한 월요일~일요일을 한 주로 봅니다.</span>
+    </div>
+
+    <div class="actions">
+      <button type="submit" id="submit-btn">보고서 생성 →</button>
+    </div>
+  </form>
+
+  <details class="help">
+    <summary>처음 사용하시나요</summary>
+    <ol>
+      <li>Notion <a href="https://www.notion.so/profile/integrations" target="_blank">Integrations</a> → New integration (Internal) → 토큰 복사</li>
+      <li>이 디렉토리의 <code>.env</code>에 <code>NOTION_TOKEN=secret_…</code> 저장</li>
+      <li>주간보고 페이지 우상단 <code>···</code> → 연결에서 위 Integration 추가</li>
+      <li>페이지 URL을 위에 붙여넣고 생성</li>
+    </ol>
+  </details>
+</main>
+
+<footer>주간보고 · Weekly Report Generator</footer>
+
+<div id="loading-overlay" aria-hidden="true" role="status" aria-live="polite">
+  <div class="loading-content">
+    <p class="loading-eyebrow">Generating</p>
+    <p class="loading-headline">한 주를 한 페이지로<br>정리하는 중</p>
+    <div class="progress" aria-hidden="true">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <div class="progress-meta">
+      <span class="progress-step" id="progress-step">시작하는 중…</span>
+      <span class="progress-pct" id="progress-pct">0%</span>
+    </div>
+    <p class="progress-elapsed" id="progress-elapsed">00:00</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  const form    = document.getElementById('report-form');
+  const overlay = document.getElementById('loading-overlay');
+  const btn     = document.getElementById('submit-btn');
+  const bar     = document.getElementById('progress-bar');
+  const stepEl  = document.getElementById('progress-step');
+  const pctEl   = document.getElementById('progress-pct');
+  const elaEl   = document.getElementById('progress-elapsed');
+  if (!form) return;
+
+  // 시간 기반 단계 (ms 누적 기준).
+  // claude -p가 가장 길어서 그 구간을 가장 길게 잡음.
+  const stages = [
+    { until:  2500, pct: 18, text: 'Notion 페이지를 불러오는 중…' },
+    { until:  7000, pct: 38, text: '일별 토글의 업무를 펼치는 중…' },
+    { until: 12000, pct: 52, text: 'AI에게 한 주치 메모를 전달하는 중…' },
+    { until: 35000, pct: 78, text: 'AI가 결정·배움·요청을 분리하는 중…' },
+    { until: 60000, pct: 90, text: '메트릭과 헤드라인을 다듬는 중…' },
+    { until: 999999, pct: 95, text: '거의 다 됐어요. 마무리 검토 중…' },
+  ];
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function fmtTime(ms) {
+    const s = Math.floor(ms / 1000);
+    return pad(Math.floor(s / 60)) + ':' + pad(s % 60);
+  }
+
+  form.addEventListener('submit', function () {
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+    btn.disabled = true;
+    const start = Date.now();
+    // 즉시 한 번 갱신
+    bar.style.width = '6%';
+    pctEl.textContent = '6%';
+    stepEl.textContent = stages[0].text;
+
+    setInterval(function () {
+      const elapsed = Date.now() - start;
+      const s = stages.find(function (x) { return elapsed < x.until; }) || stages[stages.length - 1];
+      bar.style.width = s.pct + '%';
+      pctEl.textContent = s.pct + '%';
+      stepEl.textContent = s.text;
+      elaEl.textContent = fmtTime(elapsed);
+    }, 250);
+  });
+})();
+</script>
+</body>
+</html>

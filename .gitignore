@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+
+# Environment
+.env
+.env.local
+*.env
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# 강사 전용 자료 (수강생 미공개)
+강사매뉴얼.md
+
+# 생성된 결과물 (런타임 생성)
+01_회의비서/output/*.html
+01_회의비서/output/*.wav
+01_회의비서/samples/recording_*.wav
+01_회의비서/samples/test_audio.wav
+
+02_카드뉴스/output/*.png
+02_카드뉴스/output/*.zip
+02_카드뉴스/output/*.html
+02_카드뉴스/output/*.json
+
+03_주간보고_자동화/output/*.html
+
+# Playwright cache
+playwright-cache/
+
+# Hugging Face cache
+.cache/
+huggingface/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Keep .gitkeep
+!.gitkeep

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>W{{ week_num }} 주간보고 · {{ monday }}~{{ sunday }}</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #ffffff;
+    --fg: #0a0a0a;
+    --fg-soft: #525252;
+    --fg-muted: #a3a3a3;
+    --line: #ececea;
+    --line-strong: #d4d4d2;
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+                 system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv01";
+  }
+
+  article {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: clamp(4rem, 10vh, 7rem) 2rem 6rem;
+  }
+
+  /* ─── Header ─────────────────────────────── */
+  header {
+    margin-bottom: 4rem;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    font-weight: 500;
+    margin: 0 0 1.5rem;
+  }
+
+  .eyebrow .dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--fg-muted);
+  }
+
+  h1.title {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--fg-soft);
+    margin: 0 0 2rem;
+    text-transform: uppercase;
+  }
+
+  .headline {
+    font-size: clamp(1.7rem, 3.8vw, 2.3rem);
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    color: var(--fg);
+    margin: 0;
+  }
+
+  .headline::before {
+    content: "\201C";
+    color: var(--line-strong);
+    font-size: 1.6em;
+    line-height: 0;
+    margin-right: 0.05em;
+    vertical-align: -0.35em;
+  }
+
+  .headline::after {
+    content: "\201D";
+    color: var(--line-strong);
+    font-size: 1.6em;
+    line-height: 0;
+    margin-left: 0.05em;
+    vertical-align: -0.35em;
+  }
+
+  /* ─── Metrics ─────────────────────────────── */
+  .metrics {
+    margin: 2.5rem 0 0;
+    padding: 2rem 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem 2rem;
+  }
+
+  .metric { display: flex; flex-direction: column; gap: 0.35rem; }
+
+  .metric-label {
+    font-size: 0.72rem;
+    color: var(--fg-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .metric-value {
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--fg);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .metric-delta {
+    font-size: 0.82rem;
+    color: var(--fg-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .meta {
+    margin: 2rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    font-size: 0.78rem;
+    color: var(--fg-muted);
+    letter-spacing: 0.01em;
+  }
+
+  .meta a {
+    color: var(--fg-soft);
+    text-decoration: none;
+    transition: color 0.2s var(--ease);
+  }
+  .meta a:hover { color: var(--fg); }
+
+  /* ─── Sections ─────────────────────────────── */
+  section {
+    padding: 2.25rem 0;
+    border-top: 1px solid var(--line);
+  }
+
+  section:first-of-type { border-top: none; padding-top: 0; }
+
+  .sec-head {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1.5rem;
+    align-items: baseline;
+    margin-bottom: 1.25rem;
+  }
+
+  .sec-num {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: var(--fg-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sec-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--fg);
+  }
+
+  .sec-label .sub {
+    font-weight: 400;
+    color: var(--fg-muted);
+    margin-left: 0.6rem;
+    font-size: 0.85em;
+  }
+
+  .sec-body {
+    padding-left: calc(3rem + 1.5rem);
+  }
+
+  .sec-body ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sec-body li {
+    position: relative;
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--fg);
+    line-height: 1.65;
+  }
+
+  .sec-body li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.75em;
+    width: 0.4rem;
+    height: 1px;
+    background: var(--fg-soft);
+  }
+
+  /* ─── Footer / Actions ─────────────────────────────── */
+  .actions {
+    margin-top: 4rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .actions button {
+    background: transparent;
+    color: var(--fg-soft);
+    border: 1px solid var(--line-strong);
+    padding: 0.65rem 1.25rem;
+    font-size: 0.85rem;
+    font-family: inherit;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+    letter-spacing: 0.01em;
+  }
+
+  .actions button:hover {
+    background: var(--fg);
+    color: var(--bg);
+    border-color: var(--fg);
+  }
+
+  /* ─── Raw memos ─────────────────────────────── */
+  details.raw {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  details.raw summary {
+    cursor: pointer;
+    font-size: 0.78rem;
+    color: var(--fg-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    list-style: none;
+    transition: color 0.2s var(--ease);
+    user-select: none;
+  }
+
+  details.raw summary::-webkit-details-marker { display: none; }
+  details.raw summary::after { content: " +"; color: var(--fg-muted); }
+  details.raw[open] summary::after { content: " \2212"; }
+  details.raw summary:hover { color: var(--fg); }
+
+  .memo-day {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed var(--line);
+  }
+  .memo-day:first-of-type { border-top: none; padding-top: 0.5rem; }
+
+  .memo-day-head {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--fg-soft);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .memo-day-body {
+    white-space: pre-wrap;
+    color: var(--fg-soft);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin: 0;
+    padding-left: 1rem;
+    border-left: 1px solid var(--line);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  .colophon {
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--fg-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ─── Print ─────────────────────────────── */
+  @media print {
+    body { background: white; }
+    article { padding: 2rem 1rem; max-width: none; }
+    .actions, details.raw, .colophon { display: none; }
+    section { break-inside: avoid; }
+  }
+
+  /* ─── Mobile ─────────────────────────────── */
+  @media (max-width: 560px) {
+    .sec-head { grid-template-columns: 2rem 1fr; gap: 1rem; }
+    .sec-body { padding-left: calc(2rem + 1rem); }
+    .metric-value { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+<article>
+  <header>
+    <p class="eyebrow">
+      <span>Week {{ '%02d'|format(week_num) }}</span>
+      <span class="dot"></span>
+      <span>{{ monday }} — {{ sunday }}</span>
+    </p>
+    <h1 class="title">주간 보고서</h1>
+    <p class="headline">{{ report.headline }}</p>
+
+    {% if report.metrics %}
+    <div class="metrics">
+      {% for m in report.metrics %}
+      <div class="metric">
+        <span class="metric-label">{{ m.label }}</span>
+        <span class="metric-value">{{ m.value }}</span>
+        {% if m.delta %}<span class="metric-delta">{{ m.delta }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="meta">
+      <span>{{ generated_at }} 생성</span>
+      <span>{{ memos|length }}일치 메모 반영</span>
+      <a href="{{ page_url }}" target="_blank">원본 Notion →</a>
+    </div>
+  </header>
+
+  {% set sections = [
+    ('before',    'BEFORE',    '한 주 시작 시 상태'),
+    ('progress',  'PROGRESS',  '이번 주 성과'),
+    ('decisions', 'DECISIONS', '결정 + 근거'),
+    ('lessons',   'LESSONS',   '배운 것'),
+    ('next',      'NEXT',      '다음 주 우선순위'),
+    ('asks',      'ASKS',      '도움 요청·의사결정 필요'),
+    ('risks',     'RISKS',     '남은 우려')
+  ] %}
+
+  {% set ns = namespace(idx=0) %}
+  {% for key, label, sub in sections %}
+    {% set items = report.get(key) %}
+    {% if items %}
+      {% set ns.idx = ns.idx + 1 %}
+      <section>
+        <div class="sec-head">
+          <span class="sec-num">{{ '%02d'|format(ns.idx) }}</span>
+          <span class="sec-label">{{ label }} <span class="sub">{{ sub }}</span></span>
+        </div>
+        <div class="sec-body">
+          <ul>{% for item in items %}<li>{{ item }}</li>{% endfor %}</ul>
+        </div>
+      </section>
+    {% endif %}
+  {% endfor %}
+
+  <div class="actions">
+    <button onclick="window.print()">인쇄 · PDF</button>
+    <button onclick="history.back()">새로 만들기</button>
+  </div>
+
+  <details class="raw">
+    <summary>원문 메모</summary>
+    {% for m in memos %}
+    <div class="memo-day">
+      <div class="memo-day-head">{{ m.date }} · {{ m.weekday }}요일 — {{ m.header }}</div>
+      {% if m.body %}<pre class="memo-day-body">{{ m.body }}</pre>{% endif %}
+    </div>
+    {% endfor %}
+  </details>
+
+  <p class="colophon">Weekly Report Generator</p>
+</article>
+</body>
+</html>
