@@ -21,6 +21,17 @@ from pathlib import Path
 from datetime import datetime
 from urllib.parse import quote
 
+# Windows 콘솔 한글·이모지 깨짐 방지
+if sys.platform.startswith("win"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+# Windows에서는 claude가 claude.cmd로 등록 → subprocess 호출에 shell=True 필요
+_USE_SHELL = sys.platform.startswith("win")
+
 ROOT = Path(__file__).parent
 PROMPT_FILE = ROOT / "prompts" / "cards.md"
 CARD_TPL = ROOT / "templates" / "card.html"
@@ -45,6 +56,7 @@ def crawl_url(url: str) -> str:
             "--allowedTools", "mcp__firecrawl__firecrawl_scrape",
         ],
         capture_output=True, text=True,
+        shell=_USE_SHELL,
     )
     if proc.returncode != 0:
         raise RuntimeError(
@@ -64,6 +76,7 @@ def extract_cards(markdown: str, source: str) -> dict:
     proc = subprocess.run(
         ["claude", "-p", full, "--output-format", "json"],
         capture_output=True, text=True,
+        shell=_USE_SHELL,
     )
     if proc.returncode != 0:
         raise RuntimeError(f"claude 카드 추출 실패:\n{proc.stderr}")

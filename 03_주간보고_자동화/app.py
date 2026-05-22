@@ -21,6 +21,17 @@ import requests
 from dotenv import load_dotenv
 from flask import Flask, render_template, request
 
+# Windows 콘솔 한글·이모지 깨짐 방지
+if sys.platform.startswith("win"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+# Windows에서는 claude가 claude.cmd로 등록 → subprocess 호출에 shell=True 필요
+_USE_SHELL = sys.platform.startswith("win")
+
 load_dotenv()
 
 NOTION_TOKEN = os.environ.get("NOTION_TOKEN", "")
@@ -222,6 +233,7 @@ def structure_with_claude(memos: list, monday: date, sunday: date) -> dict:
         capture_output=True,
         text=True,
         timeout=180,
+        shell=_USE_SHELL,
     )
     if result.returncode != 0:
         raise RuntimeError(f"claude -p 실패: {result.stderr or result.stdout}")
@@ -299,7 +311,11 @@ def generate():
 
 def check_claude_cli() -> bool:
     try:
-        r = subprocess.run(["claude", "--version"], capture_output=True, text=True, timeout=10)
+        r = subprocess.run(
+            ["claude", "--version"],
+            capture_output=True, text=True, timeout=10,
+            shell=_USE_SHELL,
+        )
         return r.returncode == 0
     except (FileNotFoundError, subprocess.TimeoutExpired):
         return False
