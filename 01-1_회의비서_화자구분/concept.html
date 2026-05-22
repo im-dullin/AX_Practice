@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>회의비서 — 프로젝트 개념</title>
+<title>회의비서 (화자 구분 버전) — 프로젝트 개념</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 <style>
 :root {
@@ -14,6 +14,9 @@
   --ink-3: #8A8479;
   --accent: #7A2E2E;
   --gold: #C9A86E;
+  --sp-0: #7A2E2E;
+  --sp-1: #1F4E79;
+  --sp-2: #3C7A3C;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { background: var(--paper-2); color: var(--ink); }
@@ -25,256 +28,115 @@ body {
 }
 .deck { display: flex; flex-direction: column; align-items: center; gap: 32px; }
 .slide {
-  width: 1280px;
-  height: 720px;
+  width: 1280px; height: 720px;
   background: var(--paper);
-  position: relative;
-  overflow: hidden;
+  position: relative; overflow: hidden;
   box-shadow: 0 2px 20px rgba(26,26,26,0.08);
 }
-.frame {
-  padding: 56px 72px 48px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
+.frame { padding: 56px 72px 48px; height: 100%; display: flex; flex-direction: column; }
 .meta-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-  font-weight: 600;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--ink);
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink-2); font-weight: 600;
+  padding-bottom: 12px; border-bottom: 2px solid var(--ink);
 }
 .meta-bot {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-top: auto;
-  padding-top: 14px;
-  border-top: 1px solid var(--paper-2);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  font-weight: 600;
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-top: auto; padding-top: 14px; border-top: 1px solid var(--paper-2);
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 600;
 }
-
-/* Hero (cover) */
-.slide.hero .center {
-  flex: 1; display: flex; flex-direction: column; justify-content: center;
-}
-.h-eyebrow {
-  font-size: 13px;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--accent);
-  font-weight: 700;
-  margin-bottom: 18px;
-}
+.slide.hero .center { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.h-eyebrow { font-size: 13px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 18px; }
 .h-rule { width: 80px; height: 4px; background: var(--accent); margin-bottom: 36px; }
-.slide.hero h1 {
-  font-size: 84px;
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  line-height: 1.1;
-  margin-bottom: 26px;
-  word-break: keep-all;
-}
-.h-sub {
-  font-size: 24px;
-  line-height: 1.55;
-  color: var(--ink-2);
-  word-break: keep-all;
-  max-width: 900px;
-}
+.slide.hero h1 { font-size: 78px; font-weight: 800; letter-spacing: -0.035em; line-height: 1.08; margin-bottom: 26px; word-break: keep-all; }
+.h-sub { font-size: 22px; line-height: 1.55; color: var(--ink-2); word-break: keep-all; max-width: 900px; }
 .h-tag {
-  display: inline-block;
-  margin-top: 32px;
-  padding: 10px 18px;
-  background: var(--ink);
-  color: var(--paper);
-  font-size: 13px;
-  letter-spacing: 0.12em;
-  font-weight: 700;
+  display: inline-block; margin-top: 32px; padding: 10px 18px;
+  background: var(--ink); color: var(--paper);
+  font-size: 13px; letter-spacing: 0.12em; font-weight: 700;
 }
-
-/* Content slide */
 .slide.content .head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-top: 24px;
-  margin-bottom: 28px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-top: 24px; margin-bottom: 28px;
 }
-.head h2 {
-  font-size: 44px;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  line-height: 1.15;
-  margin-bottom: 8px;
-  word-break: keep-all;
-}
-.h-lead {
-  font-size: 17px;
-  color: var(--ink-2);
-  line-height: 1.5;
-  max-width: 800px;
-}
-.big-num {
-  font-size: 68px;
-  font-weight: 800;
-  color: var(--accent);
-  line-height: 1;
-  letter-spacing: -0.03em;
-}
-.big-cap {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  font-weight: 700;
-  text-align: right;
-  margin-top: 6px;
-}
+.head h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 8px; word-break: keep-all; }
+.h-lead { font-size: 17px; color: var(--ink-2); line-height: 1.5; max-width: 800px; }
+.big-num { font-size: 64px; font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -0.03em; }
+.big-cap { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; text-align: right; margin-top: 6px; }
 
-/* Flow diagram */
-.flow {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 14px;
-}
+/* Comparison (Slide 2) */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; flex: 1; align-items: stretch; }
+.compare-col { background: var(--paper-2); border-radius: 6px; padding: 24px 26px; display: flex; flex-direction: column; }
+.compare-col.alt { background: var(--ink); color: var(--paper); border-left: 5px solid var(--gold); }
+.compare-col .lbl { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); font-weight: 800; margin-bottom: 10px; }
+.compare-col.alt .lbl { color: var(--gold); }
+.compare-col .hdr { font-size: 22px; font-weight: 800; margin-bottom: 14px; letter-spacing: -0.02em; line-height: 1.2; }
+.compare-col .quote { background: var(--paper); padding: 14px 16px; border-radius: 4px; font-size: 14px; line-height: 1.6; color: var(--ink-2); font-family: "SF Mono", "Menlo", monospace; flex: 1; }
+.compare-col.alt .quote { background: rgba(255,255,255,0.08); color: var(--paper); }
+.compare-col .quote .sp-0 { color: var(--sp-0); font-weight: 700; }
+.compare-col .quote .sp-1 { color: var(--sp-1); font-weight: 700; }
+.compare-col .quote .sp-2 { color: var(--sp-2); font-weight: 700; }
+.compare-col.alt .quote .sp-0 { color: #E89090; }
+.compare-col.alt .quote .sp-1 { color: #8BB7E0; }
+.compare-col.alt .quote .sp-2 { color: #9ADC9A; }
+.compare-col .takeaway { margin-top: 12px; font-size: 13px; line-height: 1.55; color: var(--ink-2); }
+.compare-col.alt .takeaway { color: rgba(245,241,232,0.85); }
+
+/* Flow (Slide 3) */
+.flow { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; }
 .flow-step {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  padding: 18px 28px;
-  background: var(--paper-2);
-  border-radius: 6px;
-  width: 720px;
-  max-width: 100%;
+  display: flex; align-items: center; gap: 22px;
+  padding: 14px 24px; background: var(--paper-2); border-radius: 6px;
+  width: 760px; max-width: 100%;
 }
-.flow-step .icon { font-size: 36px; line-height: 1; }
+.flow-step .icon { font-size: 30px; line-height: 1; min-width: 40px; text-align: center; }
 .flow-step .label { flex: 1; }
-.flow-step .label .t { font-size: 18px; font-weight: 700; color: var(--ink); }
-.flow-step .label .d { font-size: 13px; color: var(--ink-2); margin-top: 4px; }
-.flow-arrow {
-  font-size: 18px;
-  color: var(--accent);
-  font-weight: 800;
-}
+.flow-step .label .t { font-size: 17px; font-weight: 700; color: var(--ink); }
+.flow-step .label .d { font-size: 13px; color: var(--ink-2); margin-top: 3px; }
+.flow-arrow { font-size: 14px; color: var(--accent); font-weight: 800; }
+.flow-step.final { background: var(--ink); color: var(--paper); border-left: 5px solid var(--gold); }
+.flow-step.final .label .t { color: var(--paper); }
+.flow-step.final .label .d { color: rgba(245,241,232,0.75); }
 
-/* Cards grid */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  flex: 1;
-  align-content: start;
+/* Capacity table (Slide 4) */
+.capacity { flex: 1; display: flex; flex-direction: column; gap: 4px; margin-top: 16px; }
+.cap-row {
+  display: grid; grid-template-columns: 1fr 1.2fr 2fr;
+  gap: 16px; padding: 12px 18px; background: var(--paper-2);
+  border-radius: 4px; align-items: center; font-size: 14px;
 }
-.card {
-  background: var(--paper-2);
-  padding: 22px 22px;
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
+.cap-row.head {
+  background: var(--ink); color: var(--paper);
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  font-weight: 800; padding: 10px 18px;
 }
-.card .role {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--accent);
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-.card .name {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  margin-bottom: 8px;
-  color: var(--ink);
-}
-.card .note {
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--ink-2);
-  word-break: keep-all;
-}
-.card.dark {
-  background: var(--ink);
-  color: var(--paper);
-}
+.cap-row.head .star { color: var(--gold); }
+.cap-row .count { font-weight: 800; color: var(--ink); font-size: 16px; font-variant-numeric: tabular-nums; }
+.cap-row .star { color: var(--accent); font-size: 13px; letter-spacing: 0.04em; }
+.cap-row .note { color: var(--ink-2); font-size: 13px; line-height: 1.5; word-break: keep-all; }
+.cap-row.best { background: var(--paper); border: 1.5px solid var(--accent); }
+.cap-row.best .count { color: var(--accent); }
+
+/* Limits cards (Slide 5) */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; flex: 1; align-content: start; }
+.card { background: var(--paper-2); padding: 22px; border-radius: 6px; display: flex; flex-direction: column; }
+.card.dark { background: var(--ink); color: var(--paper); }
+.card .role { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 10px; }
 .card.dark .role { color: var(--gold); }
+.card .name { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 8px; }
 .card.dark .name { color: var(--paper); }
+.card .note { font-size: 13px; line-height: 1.55; color: var(--ink-2); word-break: keep-all; }
 .card.dark .note { color: rgba(245,241,232,0.75); }
+.card .stars { font-size: 13px; color: var(--accent); letter-spacing: 0.1em; margin-top: auto; padding-top: 8px; }
+.card.dark .stars { color: var(--gold); }
 
-/* Concepts list */
-.concepts {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px 28px;
-  flex: 1;
-  align-content: start;
-}
-.concept-item {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
-.concept-item .num {
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--accent);
-  line-height: 1;
-  min-width: 44px;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-}
-.concept-item .body .t {
-  font-size: 18px;
-  font-weight: 800;
-  line-height: 1.25;
-  margin-bottom: 6px;
-  color: var(--ink);
-  word-break: keep-all;
-}
-.concept-item .body .d {
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--ink-2);
-  word-break: keep-all;
-}
-
-/* Wrap */
-.wrap-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.wrap-body h3 {
-  font-size: 56px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.12;
-  margin-bottom: 22px;
-  word-break: keep-all;
-}
-.wrap-body p {
-  font-size: 20px;
-  line-height: 1.6;
-  color: var(--ink-2);
-  word-break: keep-all;
-  max-width: 900px;
-}
+/* Concepts (Slide 6) */
+.concepts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 28px; flex: 1; align-content: start; }
+.concept-item { display: flex; gap: 16px; align-items: flex-start; }
+.concept-item .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; min-width: 44px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.concept-item .body .t { font-size: 18px; font-weight: 800; line-height: 1.25; margin-bottom: 6px; word-break: keep-all; }
+.concept-item .body .d { font-size: 13px; line-height: 1.55; color: var(--ink-2); word-break: keep-all; }
 </style>
 </head>
 <body>
@@ -284,261 +146,246 @@ body {
 <section class="slide hero">
   <div class="frame">
     <div class="meta-top">
-      <span>Project ① · Meeting Assistant</span>
+      <span>Project ①-1 · Meeting Assistant (Diarization)</span>
       <span>Concept Brief · 01 / 06</span>
     </div>
     <div class="center">
-      <div class="h-eyebrow">Project Concept Brief</div>
+      <div class="h-eyebrow">기본 회의비서 + 화자 자동 분리 · 심화 버전</div>
       <div class="h-rule"></div>
-      <h1>회의비서.<br>듣고, 정리하고, 보고서까지.</h1>
-      <p class="h-sub">회의 음성을 받아 **요약·결정·액션·리스크**까지 자동으로 정리해 *한 장의 보고서*로 띄워주는 AI 비서. *내 PC 안에서만* 동작하고, *MCP 서버 없이* 시작합니다.</p>
-      <div class="h-tag">5 단계 자동 흐름 · 외부 의존 0 · 첫 자동화 도구</div>
+      <h1>회의비서 — 화자까지 자동으로.</h1>
+      <p class="h-sub">기본 회의비서에 **pyannote.audio**를 결합해 *누가 무엇을 말했는지*까지 자동 라벨링. 화자별 색상이 다른 보고서로 *진짜 회의록* 수준.</p>
+      <div class="h-tag">★ Week 2 미션 후보 · 코드 60줄 추가</div>
     </div>
-    <div class="meta-bot"><span>Project ① · Concept</span><span>01 / 06</span></div>
+    <div class="meta-bot"><span>Project ①-1 · Concept</span><span>01 / 06</span></div>
   </div>
 </section>
 
-<!-- Slide 2 · 어떤 문제 -->
+<!-- Slide 2 · 왜 필요한가 -->
 <section class="slide content">
   <div class="frame">
-    <div class="meta-top">
-      <span>What problem?</span>
-      <span>02 / 06</span>
-    </div>
+    <div class="meta-top"><span>Why diarization?</span><span>02 / 06</span></div>
     <div class="head">
       <div>
-        <h2>어떤 문제를 풀어요?</h2>
-        <div class="h-lead">회의 끝나면 정리하다가 *저녁에 한 시간 더 일하던 경험* — 다들 있으시죠.</div>
+        <h2>왜 화자 구분이 필요한가?</h2>
+        <div class="h-lead">기본 회의비서는 *내용*만 알지 *누가 말했는지*는 흐려져요.</div>
       </div>
-      <div>
-        <div class="big-num">3</div>
-        <div class="big-cap">반복 문제</div>
+      <div><div class="big-num">2</div><div class="big-cap">결과 비교</div></div>
+    </div>
+    <div class="compare">
+      <div class="compare-col">
+        <div class="lbl">Project ① · 기본 회의비서</div>
+        <div class="hdr">한 줄로 평탄</div>
+        <div class="quote">자 시작하겠습니다 이번 주 신규 리드는 32건이고 박과장이 ROI 분석을 5월 27일까지 공유한다고 했고 김부장님께서 다음 주 월요일 클로징 일정 확인 부탁드린다고 말씀하셨고...</div>
+        <div class="takeaway">→ 누가 *무엇을 약속*했는지 흐려짐. Claude가 액션 owner 추정 정확도 ↓</div>
+      </div>
+      <div class="compare-col alt">
+        <div class="lbl">Project ①-1 · 화자 구분 ★</div>
+        <div class="hdr">화자별 라벨</div>
+        <div class="quote">
+<span class="sp-0">SPEAKER_00</span>: 자, 시작하겠습니다.<br>
+<span class="sp-1">SPEAKER_01</span>: 이번 주 신규 리드는 32건이고...<br>
+<span class="sp-0">SPEAKER_00</span>: 박과장님, ROI 분석 부탁드립니다.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;5월 27일까지요.<br>
+<span class="sp-2">SPEAKER_02</span>: 네 알겠습니다. 27일까지 공유드리겠습니다.</div>
+        <div class="takeaway">→ *누가 약속*했는지 명확. Claude가 액션 owner 정확히 매핑. HTML도 색상으로 시각화.</div>
       </div>
     </div>
-    <div class="cards" style="grid-template-rows: 1fr;">
-      <div class="card">
-        <div class="role">문제 ①</div>
-        <div class="name">누가, 뭘, 언제까지?</div>
-        <div class="note">분명히 합의했는데 다음 주에 또 같은 얘기를 한다. 액션 아이템이 *말로만* 남아있기 때문.</div>
-      </div>
-      <div class="card">
-        <div class="role">문제 ②</div>
-        <div class="name">회의록 정리에 1시간</div>
-        <div class="note">실제 일하는 시간보다 *기록·정리*에 더 많은 시간이 든다. 회의 끝나면 진이 빠진다.</div>
-      </div>
-      <div class="card">
-        <div class="role">문제 ③</div>
-        <div class="name">집중 vs 받아쓰기</div>
-        <div class="note">받아쓰면서 듣다 보면 *맥락을 놓친다*. 둘 다 동시에 잘하기는 어렵다.</div>
-      </div>
-    </div>
-    <div class="meta-bot"><span>Project ① · Concept</span><span>02 / 06</span></div>
+    <div class="meta-bot"><span>Project ①-1 · Concept</span><span>02 / 06</span></div>
   </div>
 </section>
 
-<!-- Slide 3 · 동작 흐름 -->
+<!-- Slide 3 · 4단계 알고리즘 -->
 <section class="slide content">
   <div class="frame">
-    <div class="meta-top">
-      <span>How it works · 5 stages</span>
-      <span>03 / 06</span>
-    </div>
+    <div class="meta-top"><span>How it works · 4-step algorithm</span><span>03 / 06</span></div>
     <div class="head">
       <div>
-        <h2>어떻게 동작해요?</h2>
-        <div class="h-lead">사람이 손대는 건 *녹음 시작·종료* 두 번뿐. 그 사이 5단계는 자동.</div>
+        <h2>화자 분리는 어떻게 동작하나?</h2>
+        <div class="h-lead">*내용*과 무관, **목소리 특성**으로만 분리. 지문 분류와 같은 원리.</div>
       </div>
-      <div>
-        <div class="big-num">5</div>
-        <div class="big-cap">자동 단계</div>
-      </div>
+      <div><div class="big-num">4</div><div class="big-cap">단계</div></div>
     </div>
     <div class="flow">
       <div class="flow-step">
         <div class="icon">🎤</div>
-        <div class="label"><div class="t">마이크 녹음 (sounddevice)</div><div class="d">PC 기본 마이크에서 16kHz WAV 파일로 저장</div></div>
+        <div class="label"><div class="t">① VAD (Voice Activity Detection)</div><div class="d">발화 vs 무음 구간 구분</div></div>
       </div>
       <div class="flow-arrow">▼</div>
       <div class="flow-step">
-        <div class="icon">📝</div>
-        <div class="label"><div class="t">음성 → 텍스트 (faster-whisper)</div><div class="d">한국어 STT — 내 PC 안에서만 동작, 외부 전송 X</div></div>
+        <div class="icon">✂️</div>
+        <div class="label"><div class="t">② Segmentation</div><div class="d">발화 구간을 1~2초 조각으로 자름</div></div>
       </div>
       <div class="flow-arrow">▼</div>
       <div class="flow-step">
-        <div class="icon">🧠</div>
-        <div class="label"><div class="t">요약 + 액션 추출 (Claude)</div><div class="d">텍스트 → 7섹션 JSON 으로 구조화</div></div>
+        <div class="icon">🧬</div>
+        <div class="label"><div class="t">③ Embedding (목소리 → 192차원 벡터)</div><div class="d">조각마다 음역대·음색·발음 습관·호흡 패턴을 숫자로</div></div>
       </div>
       <div class="flow-arrow">▼</div>
       <div class="flow-step">
-        <div class="icon">🎨</div>
-        <div class="label"><div class="t">HTML 보고서 생성 + 자동 오픈</div><div class="d">JSON을 Paperlogy 톤 한 장짜리 보고서로</div></div>
+        <div class="icon">🔗</div>
+        <div class="label"><div class="t">④ Clustering</div><div class="d">비슷한 벡터끼리 묶어 *같은 사람* 판정</div></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-step final">
+        <div class="icon">🎯</div>
+        <div class="label"><div class="t">SPEAKER_00, SPEAKER_01, ... (익명 라벨)</div><div class="d">★ *김부장*·*이대리* 실명 매핑은 사람이 따로 — Week 2 미션</div></div>
       </div>
     </div>
-    <div class="meta-bot"><span>Project ① · Concept</span><span>03 / 06</span></div>
+    <div class="meta-bot"><span>Project ①-1 · Concept · Algorithm</span><span>03 / 06</span></div>
   </div>
 </section>
 
-<!-- Slide 4 · 부품 (OSS) -->
+<!-- Slide 4 · 화자 수 한계 -->
 <section class="slide content">
   <div class="frame">
-    <div class="meta-top">
-      <span>Open source parts</span>
-      <span>04 / 06</span>
-    </div>
+    <div class="meta-top"><span>★ Capacity · How many speakers?</span><span>04 / 06</span></div>
     <div class="head">
       <div>
-        <h2>어떤 부품으로 만들었나요?</h2>
-        <div class="h-lead">모두 **무료 · 오픈소스 · 로컬**. 회의 내용 외부 전송 0.</div>
+        <h2>몇 명까지 정확한가?</h2>
+        <div class="h-lead">pyannote/speaker-diarization-3.1 은 *공식 화자 수 제한 없음*. 실측 정확도:</div>
       </div>
+      <div><div class="big-num">2~6</div><div class="big-cap">★ Sweet spot</div></div>
+    </div>
+    <div class="capacity">
+      <div class="cap-row head">
+        <div>화자 수</div>
+        <div class="star">정확도</div>
+        <div>비고</div>
+      </div>
+      <div class="cap-row">
+        <div class="count">1명</div>
+        <div class="star">★★★★★</div>
+        <div class="note">모놀로그·강연. SPEAKER_00 한 명만 나옴 — 정상</div>
+      </div>
+      <div class="cap-row best">
+        <div class="count">2~6명</div>
+        <div class="star">★★★★★</div>
+        <div class="note"><strong>가장 잘 동작하는 구간</strong> — 일반 회의실 환경</div>
+      </div>
+      <div class="cap-row">
+        <div class="count">7~10명</div>
+        <div class="star">★★★</div>
+        <div class="note">정확도 점차 ↓. 너무 비슷한 목소리끼리 합쳐질 수 있음</div>
+      </div>
+      <div class="cap-row">
+        <div class="count">11명+</div>
+        <div class="star">★★</div>
+        <div class="note">대형 회의장. pyannoteAI Premium 또는 별도 모델 권장</div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ①-1 · Concept · Capacity</span><span>04 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 5 · 정확도 영향 요소 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top"><span>Quality drivers · 6 factors</span><span>05 / 06</span></div>
+    <div class="head">
       <div>
-        <div class="big-num">5</div>
-        <div class="big-cap">OSS 부품</div>
+        <h2>정확도에 영향 주는 다른 요소.</h2>
+        <div class="h-lead">결과가 이상할 때 *왜 그런지* 점검하는 6가지 기준.</div>
       </div>
+      <div><div class="big-num">6</div><div class="big-cap">Factors</div></div>
     </div>
     <div class="cards">
       <div class="card">
-        <div class="role">녹음기</div>
-        <div class="name">sounddevice</div>
-        <div class="note">PC 마이크 ↔ Python 다리. PortAudio 기반</div>
+        <div class="role">요소 ①</div>
+        <div class="name">마이크 품질</div>
+        <div class="note">헤드셋 ≫ 노트북 내장. 거리·반향 영향 큼. *회의실 중앙 마이크* 권장</div>
+        <div class="stars">★★★★★</div>
       </div>
       <div class="card">
-        <div class="role">카세트테이프</div>
-        <div class="name">soundfile</div>
-        <div class="note">받은 소리를 표준 .wav 파일로 저장</div>
+        <div class="role">요소 ②</div>
+        <div class="name">화자별 발화 시간</div>
+        <div class="note">각자 *10초 이상* 발화 시 임베딩 충실. 1~2초만이면 합쳐질 수 있음</div>
+        <div class="stars">★★★★★</div>
       </div>
       <div class="card">
-        <div class="role">통역사 (귀)</div>
-        <div class="name">faster-whisper</div>
-        <div class="note">OpenAI Whisper 한국어 STT 모델의 *고속 버전* (CTranslate2)</div>
+        <div class="role">요소 ③</div>
+        <div class="name">목소리 유사도</div>
+        <div class="note">가족·형제·또래는 임베딩이 가까워 *같은 화자*로 합쳐질 위험</div>
+        <div class="stars">★★</div>
       </div>
       <div class="card">
-        <div class="role">정리해주는 동료</div>
-        <div class="name">Claude Code CLI</div>
-        <div class="note">"7개 영역으로 정리해줘" 한 마디 → JSON 응답</div>
+        <div class="role">요소 ④</div>
+        <div class="name">동시 발화 (overlap)</div>
+        <div class="note">pyannote 3.1은 일부 처리하지만 *완벽하지 않음*. 회의 매너로 한 명씩</div>
+        <div class="stars">★★★</div>
       </div>
       <div class="card dark">
-        <div class="role">접착제</div>
-        <div class="name">Python</div>
-        <div class="note">위 4개 부품을 한 흐름으로 묶는 글루 코드</div>
+        <div class="role">요소 ⑤</div>
+        <div class="name">짧은 발화</div>
+        <div class="note">1~2초 발화는 임베딩 데이터 부족. *"네"*, *"좋아요"* 단발은 UNKNOWN 가능</div>
+        <div class="stars">★★</div>
       </div>
       <div class="card">
-        <div class="role">출력</div>
-        <div class="name">HTML 템플릿</div>
-        <div class="note">한 장짜리 보고서. 브라우저에서 자동 오픈</div>
+        <div class="role">요소 ⑥</div>
+        <div class="name">배경 잡음 / BGM</div>
+        <div class="note">노이즈가 임베딩에 섞임. 사전 노이즈 제거 권장 (RNNoise 등)</div>
+        <div class="stars">★★</div>
       </div>
     </div>
-    <div class="meta-bot"><span>Project ① · Concept</span><span>04 / 06</span></div>
+    <div class="meta-bot"><span>Project ①-1 · Concept · Quality</span><span>05 / 06</span></div>
   </div>
 </section>
 
-<!-- Slide 5 · 핵심 개념 5가지 -->
+<!-- Slide 6 · 핵심 개념 + Week 2 미션 -->
 <section class="slide content">
   <div class="frame">
-    <div class="meta-top">
-      <span>5 concepts you learn by building</span>
-      <span>05 / 06</span>
-    </div>
+    <div class="meta-top"><span>5 concepts + Week 2 missions</span><span>06 / 06</span></div>
     <div class="head">
       <div>
-        <h2>핵심 개념 5가지.</h2>
-        <div class="h-lead">만들면서 손으로 익히는 *AI 시대 기본기*.</div>
+        <h2>핵심 개념 5가지 + Week 2 미션.</h2>
+        <div class="h-lead">만들면서 익히는 *AI 시대 자동화 기본기* + 한 달 후 자기 손으로.</div>
       </div>
-      <div>
-        <div class="big-num">05</div>
-        <div class="big-cap">Core</div>
-      </div>
+      <div><div class="big-num">05</div><div class="big-cap">+ Missions</div></div>
     </div>
     <div class="concepts">
       <div class="concept-item">
         <div class="num">01</div>
         <div class="body">
-          <div class="t">음성 → 글 (STT)</div>
-          <div class="d">사람 말 소리 → 텍스트. 외국 영상에 자막 자동 다는 것과 같은 원리. 우리는 *로컬에서* 한다.</div>
+          <div class="t">화자 분리 (Speaker Diarization)</div>
+          <div class="d">*내용 무관* 목소리 특성으로만. 4단계 알고리즘. 지문 분류 원리.</div>
         </div>
       </div>
       <div class="concept-item">
         <div class="num">02</div>
         <div class="body">
-          <div class="t">로컬 AI vs 클라우드 AI</div>
-          <div class="d">민감 데이터(회의)는 로컬, 일반 요약은 클라우드. *둘을 영리하게 섞는 게* 실무 패턴.</div>
+          <div class="t">다중 AI 모델 병합</div>
+          <div class="d">Whisper(전사) + pyannote(화자) — 시간축 매칭. *AI 시대 표준 패턴*.</div>
         </div>
       </div>
       <div class="concept-item">
         <div class="num">03</div>
         <div class="body">
-          <div class="t">JSON 강제 — 형식 명령</div>
-          <div class="d">AI에게 *자유 작문* 시키면 들쭉날쭉. *빈칸 양식*을 강제하면 데이터로 자동 변환 가능.</div>
+          <div class="t">.env 환경 변수 + 보안</div>
+          <div class="d">토큰을 코드에 박지 않기. .gitignore로 git 제외. 보안 기본기.</div>
         </div>
       </div>
       <div class="concept-item">
         <div class="num">04</div>
         <div class="body">
-          <div class="t">템플릿 + 데이터</div>
-          <div class="d">"제목: {title}" + {title:"주간"} = "제목: 주간". 같은 모양에 데이터만 갈아끼우는 패턴.</div>
+          <div class="t">Gated 모델 라이선스</div>
+          <div class="d">HuggingFace gated 모델은 *모델마다 동의 필요* (3개). 오픈소스 실무.</div>
         </div>
       </div>
       <div class="concept-item">
         <div class="num">05</div>
         <div class="body">
-          <div class="t">subprocess — 도구 조립</div>
-          <div class="d">Python에서 다른 도구(claude CLI)를 부르는 *접착제*. 작은 도구들을 묶어 큰 자동화를 만든다.</div>
+          <div class="t">점진적 의존성</div>
+          <div class="d">기본(외부 의존 0) → 한 단계씩 심화. 처음부터 다 박지 말 것.</div>
+        </div>
+      </div>
+      <div class="concept-item">
+        <div class="num">★</div>
+        <div class="body">
+          <div class="t">Week 2 미션 후보 4가지</div>
+          <div class="d">A. 실명 매핑 UI · B. num_speakers 힌트 · C. Notion 자동 등재 · D. 액션 owner 매핑</div>
         </div>
       </div>
     </div>
-    <div class="meta-bot"><span>Project ① · Concept</span><span>05 / 06</span></div>
-  </div>
-</section>
-
-<!-- Slide 6 · Wrap / 응용 -->
-<section class="slide content">
-  <div class="frame">
-    <div class="meta-top">
-      <span>What you can do tomorrow</span>
-      <span>06 / 06</span>
-    </div>
-    <div class="head">
-      <div>
-        <h2>내일부터 어떻게 써요?</h2>
-        <div class="h-lead">*출력 단*만 갈아끼우면 즉시 실무 도구. **30일 로드맵 Week 1 미션**.</div>
-      </div>
-      <div>
-        <div class="big-num">04</div>
-        <div class="big-cap">실무 응용</div>
-      </div>
-    </div>
-    <div class="cards">
-      <div class="card">
-        <div class="role">+ Slack</div>
-        <div class="name">팀 채널 자동 발송</div>
-        <div class="note">회의 끝나고 5초 후 #weekly 채널에 요약 도착. 팀 전체가 같은 페이지에.</div>
-      </div>
-      <div class="card">
-        <div class="role">+ Notion</div>
-        <div class="name">사내 위키 자동 등재</div>
-        <div class="note">회의록이 사내 Notion에 영구 저장. 신입도 과거 모든 회의 검색 가능.</div>
-      </div>
-      <div class="card">
-        <div class="role">+ Gmail</div>
-        <div class="name">메일 초안 자동 생성</div>
-        <div class="note">다음 회의 안내 메일이 초안함에 미리 와있음. 사람은 *검수만* 한다.</div>
-      </div>
-      <div class="card dark">
-        <div class="role">+ Calendar</div>
-        <div class="name">액션 → 일정 자동 등록</div>
-        <div class="note">"5월 27일까지 ROI 분석" → 캘린더에 마감 알림이 자동으로.</div>
-      </div>
-      <div class="card">
-        <div class="role">실습 모드</div>
-        <div class="name">MCP 서버 없음 · 완전 로컬</div>
-        <div class="note">세 프로젝트 중 *가장 단순한 시작점*. 환경 세팅 검증용.</div>
-      </div>
-      <div class="card">
-        <div class="role">Next</div>
-        <div class="name">Project ② 카드뉴스</div>
-        <div class="note">이제 *MCP 서버*를 처음으로 도입합니다. Firecrawl로 URL → 카드 5장.</div>
-      </div>
-    </div>
-    <div class="meta-bot"><span>Project ① · Concept</span><span>06 / 06</span></div>
+    <div class="meta-bot"><span>Project ①-1 · Concept · End</span><span>06 / 06</span></div>
   </div>
 </section>
 
