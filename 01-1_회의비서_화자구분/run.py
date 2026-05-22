@@ -155,7 +155,18 @@ def transcribe(src: Path) -> str:
             "   - https://huggingface.co/pyannote/speaker-diarization-community-1 (임베딩, 새 버전)\n"
             "   각 페이지에서 'You have been granted access' 표시 확인"
         )
-    diarization = pipeline(str(src))
+    result = pipeline(str(src))
+
+    # pyannote.audio 3.x 호환 — 신버전(3.4+)은 DiarizeOutput wrapper 반환
+    # 구버전(3.1~3.3)은 Annotation을 직접 반환
+    if hasattr(result, "speaker_diarization"):
+        diarization = result.speaker_diarization
+    elif hasattr(result, "annotation"):
+        diarization = result.annotation
+    elif hasattr(result, "to_annotation"):
+        diarization = result.to_annotation()
+    else:
+        diarization = result
 
     speaker_turns = [
         {"start": turn.start, "end": turn.end, "speaker": speaker}
