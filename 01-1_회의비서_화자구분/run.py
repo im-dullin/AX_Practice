@@ -110,9 +110,11 @@ def transcribe(src: Path) -> str:
         sys.exit(
             "❌ HF_TOKEN 환경변수가 비어 있습니다.\n"
             "   1) https://huggingface.co/settings/tokens 에서 Read 토큰 발급\n"
-            "   2) https://huggingface.co/pyannote/speaker-diarization-3.1 에서 Agree and access\n"
-            "   3) https://huggingface.co/pyannote/segmentation-3.0 에서 Agree and access (의존 모델)\n"
-            "   4) .env 파일 (이 폴더 안)에 HF_TOKEN=hf_xxx... 저장 후 재실행"
+            "   2) 다음 3개 모델 페이지에서 모두 Agree and access:\n"
+            "      - https://huggingface.co/pyannote/speaker-diarization-3.1\n"
+            "      - https://huggingface.co/pyannote/segmentation-3.0\n"
+            "      - https://huggingface.co/pyannote/speaker-diarization-community-1 (임베딩, 새 버전)\n"
+            "   3) .env 파일 (이 폴더 안)에 HF_TOKEN=hf_xxx... 저장 후 재실행"
         )
 
     try:
@@ -146,10 +148,12 @@ def transcribe(src: Path) -> str:
     except Exception as e:
         sys.exit(
             f"❌ pyannote 모델 로드 실패: {e}\n"
-            "   다음을 확인하세요:\n"
+            "   다음 3개를 모두 확인하세요:\n"
             "   - HF_TOKEN 이 유효한 Read 토큰인지\n"
-            "   - https://huggingface.co/pyannote/speaker-diarization-3.1 에서 Agree and access 했는지\n"
-            "   - https://huggingface.co/pyannote/segmentation-3.0 에서 Agree and access 했는지"
+            "   - https://huggingface.co/pyannote/speaker-diarization-3.1 (메인)\n"
+            "   - https://huggingface.co/pyannote/segmentation-3.0 (세그먼테이션)\n"
+            "   - https://huggingface.co/pyannote/speaker-diarization-community-1 (임베딩, 새 버전)\n"
+            "   각 페이지에서 'You have been granted access' 표시 확인"
         )
     diarization = pipeline(str(src))
 

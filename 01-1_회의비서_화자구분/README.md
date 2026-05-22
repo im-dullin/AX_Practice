@@ -39,10 +39,13 @@
 python -m pip install -r requirements.txt
 ```
 
-2. HuggingFace 토큰 발급 + 모델 라이선스 동의 (한 번만, 약 3분):
+2. HuggingFace 토큰 발급 + **3개 모델** 라이선스 동의 (한 번만, 약 5분):
    - <https://huggingface.co/settings/tokens> → *Create new token* → **Token type: Read**
-   - <https://huggingface.co/pyannote/speaker-diarization-3.1> → *Agree and access*
-   - <https://huggingface.co/pyannote/segmentation-3.0> → *Agree and access* (의존 모델)
+   - <https://huggingface.co/pyannote/speaker-diarization-3.1> → *Agree and access* (메인 파이프라인)
+   - <https://huggingface.co/pyannote/segmentation-3.0> → *Agree and access* (세그먼테이션 의존)
+   - <https://huggingface.co/pyannote/speaker-diarization-community-1> → *Agree and access* ★ (임베딩 의존, 새 버전)
+
+   세 페이지 모두 *"You have been granted access to this model"* 표시되어야 함.
 
 3. `.env` 파일 만들고 토큰 저장
 ```powershell
