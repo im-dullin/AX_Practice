@@ -1,0 +1,16 @@
+# 회의비서 화자 구분 버전 — 필요한 Python 패키지
+# 설치:
+#   Windows  : python -m pip install -r requirements.txt
+#   macOS    : pip3 install -r requirements.txt
+
+# 기본 회의비서와 공통
+sounddevice
+soundfile
+numpy
+faster-whisper
+
+# 화자 분리 — pyannote.audio (HF_TOKEN 필요)
+pyannote.audio>=3.1.0
+
+# 환경변수 (.env) 로드
+python-dotenv

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>회의비서 — 프로젝트 개념</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<style>
+:root {
+  --paper: #F5F1E8;
+  --paper-2: #ECE5D3;
+  --ink: #1A1A1A;
+  --ink-2: #4A4540;
+  --ink-3: #8A8479;
+  --accent: #7A2E2E;
+  --gold: #C9A86E;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { background: var(--paper-2); color: var(--ink); }
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-feature-settings: "ss01", "tnum";
+  -webkit-font-smoothing: antialiased;
+  padding: 40px 0;
+}
+.deck { display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.slide {
+  width: 1280px;
+  height: 720px;
+  background: var(--paper);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 20px rgba(26,26,26,0.08);
+}
+.frame {
+  padding: 56px 72px 48px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.meta-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-weight: 600;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--ink);
+}
+.meta-bot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--paper-2);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+
+/* Hero (cover) */
+.slide.hero .center {
+  flex: 1; display: flex; flex-direction: column; justify-content: center;
+}
+.h-eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+.h-rule { width: 80px; height: 4px; background: var(--accent); margin-bottom: 36px; }
+.slide.hero h1 {
+  font-size: 84px;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  margin-bottom: 26px;
+  word-break: keep-all;
+}
+.h-sub {
+  font-size: 24px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  word-break: keep-all;
+  max-width: 900px;
+}
+.h-tag {
+  display: inline-block;
+  margin-top: 32px;
+  padding: 10px 18px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+}
+
+/* Content slide */
+.slide.content .head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 24px;
+  margin-bottom: 28px;
+}
+.head h2 {
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin-bottom: 8px;
+  word-break: keep-all;
+}
+.h-lead {
+  font-size: 17px;
+  color: var(--ink-2);
+  line-height: 1.5;
+  max-width: 800px;
+}
+.big-num {
+  font-size: 68px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.big-cap {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 700;
+  text-align: right;
+  margin-top: 6px;
+}
+
+/* Flow diagram */
+.flow {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+.flow-step {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 18px 28px;
+  background: var(--paper-2);
+  border-radius: 6px;
+  width: 720px;
+  max-width: 100%;
+}
+.flow-step .icon { font-size: 36px; line-height: 1; }
+.flow-step .label { flex: 1; }
+.flow-step .label .t { font-size: 18px; font-weight: 700; color: var(--ink); }
+.flow-step .label .d { font-size: 13px; color: var(--ink-2); margin-top: 4px; }
+.flow-arrow {
+  font-size: 18px;
+  color: var(--accent);
+  font-weight: 800;
+}
+
+/* Cards grid */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  flex: 1;
+  align-content: start;
+}
+.card {
+  background: var(--paper-2);
+  padding: 22px 22px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+}
+.card .role {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.card .name {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.card .note {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  word-break: keep-all;
+}
+.card.dark {
+  background: var(--ink);
+  color: var(--paper);
+}
+.card.dark .role { color: var(--gold); }
+.card.dark .name { color: var(--paper); }
+.card.dark .note { color: rgba(245,241,232,0.75); }
+
+/* Concepts list */
+.concepts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 28px;
+  flex: 1;
+  align-content: start;
+}
+.concept-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.concept-item .num {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  min-width: 44px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.concept-item .body .t {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+  margin-bottom: 6px;
+  color: var(--ink);
+  word-break: keep-all;
+}
+.concept-item .body .d {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  word-break: keep-all;
+}
+
+/* Wrap */
+.wrap-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.wrap-body h3 {
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  margin-bottom: 22px;
+  word-break: keep-all;
+}
+.wrap-body p {
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  word-break: keep-all;
+  max-width: 900px;
+}
+</style>
+</head>
+<body>
+<div class="deck">
+
+<!-- Slide 1 · Cover -->
+<section class="slide hero">
+  <div class="frame">
+    <div class="meta-top">
+      <span>Project ① · Meeting Assistant</span>
+      <span>Concept Brief · 01 / 06</span>
+    </div>
+    <div class="center">
+      <div class="h-eyebrow">Project Concept Brief</div>
+      <div class="h-rule"></div>
+      <h1>회의비서.<br>듣고, 정리하고, 보고서까지.</h1>
+      <p class="h-sub">회의 음성을 받아 **요약·결정·액션·리스크**까지 자동으로 정리해 *한 장의 보고서*로 띄워주는 AI 비서. *내 PC 안에서만* 동작하고, *MCP 서버 없이* 시작합니다.</p>
+      <div class="h-tag">5 단계 자동 흐름 · 외부 의존 0 · 첫 자동화 도구</div>
+    </div>
+    <div class="meta-bot"><span>Project ① · Concept</span><span>01 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 2 · 어떤 문제 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top">
+      <span>What problem?</span>
+      <span>02 / 06</span>
+    </div>
+    <div class="head">
+      <div>
+        <h2>어떤 문제를 풀어요?</h2>
+        <div class="h-lead">회의 끝나면 정리하다가 *저녁에 한 시간 더 일하던 경험* — 다들 있으시죠.</div>
+      </div>
+      <div>
+        <div class="big-num">3</div>
+        <div class="big-cap">반복 문제</div>
+      </div>
+    </div>
+    <div class="cards" style="grid-template-rows: 1fr;">
+      <div class="card">
+        <div class="role">문제 ①</div>
+        <div class="name">누가, 뭘, 언제까지?</div>
+        <div class="note">분명히 합의했는데 다음 주에 또 같은 얘기를 한다. 액션 아이템이 *말로만* 남아있기 때문.</div>
+      </div>
+      <div class="card">
+        <div class="role">문제 ②</div>
+        <div class="name">회의록 정리에 1시간</div>
+        <div class="note">실제 일하는 시간보다 *기록·정리*에 더 많은 시간이 든다. 회의 끝나면 진이 빠진다.</div>
+      </div>
+      <div class="card">
+        <div class="role">문제 ③</div>
+        <div class="name">집중 vs 받아쓰기</div>
+        <div class="note">받아쓰면서 듣다 보면 *맥락을 놓친다*. 둘 다 동시에 잘하기는 어렵다.</div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ① · Concept</span><span>02 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 3 · 동작 흐름 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top">
+      <span>How it works · 5 stages</span>
+      <span>03 / 06</span>
+    </div>
+    <div class="head">
+      <div>
+        <h2>어떻게 동작해요?</h2>
+        <div class="h-lead">사람이 손대는 건 *녹음 시작·종료* 두 번뿐. 그 사이 5단계는 자동.</div>
+      </div>
+      <div>
+        <div class="big-num">5</div>
+        <div class="big-cap">자동 단계</div>
+      </div>
+    </div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="icon">🎤</div>
+        <div class="label"><div class="t">마이크 녹음 (sounddevice)</div><div class="d">PC 기본 마이크에서 16kHz WAV 파일로 저장</div></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-step">
+        <div class="icon">📝</div>
+        <div class="label"><div class="t">음성 → 텍스트 (faster-whisper)</div><div class="d">한국어 STT — 내 PC 안에서만 동작, 외부 전송 X</div></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-step">
+        <div class="icon">🧠</div>
+        <div class="label"><div class="t">요약 + 액션 추출 (Claude)</div><div class="d">텍스트 → 7섹션 JSON 으로 구조화</div></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-step">
+        <div class="icon">🎨</div>
+        <div class="label"><div class="t">HTML 보고서 생성 + 자동 오픈</div><div class="d">JSON을 Paperlogy 톤 한 장짜리 보고서로</div></div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ① · Concept</span><span>03 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 4 · 부품 (OSS) -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top">
+      <span>Open source parts</span>
+      <span>04 / 06</span>
+    </div>
+    <div class="head">
+      <div>
+        <h2>어떤 부품으로 만들었나요?</h2>
+        <div class="h-lead">모두 **무료 · 오픈소스 · 로컬**. 회의 내용 외부 전송 0.</div>
+      </div>
+      <div>
+        <div class="big-num">5</div>
+        <div class="big-cap">OSS 부품</div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="role">녹음기</div>
+        <div class="name">sounddevice</div>
+        <div class="note">PC 마이크 ↔ Python 다리. PortAudio 기반</div>
+      </div>
+      <div class="card">
+        <div class="role">카세트테이프</div>
+        <div class="name">soundfile</div>
+        <div class="note">받은 소리를 표준 .wav 파일로 저장</div>
+      </div>
+      <div class="card">
+        <div class="role">통역사 (귀)</div>
+        <div class="name">faster-whisper</div>
+        <div class="note">OpenAI Whisper 한국어 STT 모델의 *고속 버전* (CTranslate2)</div>
+      </div>
+      <div class="card">
+        <div class="role">정리해주는 동료</div>
+        <div class="name">Claude Code CLI</div>
+        <div class="note">"7개 영역으로 정리해줘" 한 마디 → JSON 응답</div>
+      </div>
+      <div class="card dark">
+        <div class="role">접착제</div>
+        <div class="name">Python</div>
+        <div class="note">위 4개 부품을 한 흐름으로 묶는 글루 코드</div>
+      </div>
+      <div class="card">
+        <div class="role">출력</div>
+        <div class="name">HTML 템플릿</div>
+        <div class="note">한 장짜리 보고서. 브라우저에서 자동 오픈</div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ① · Concept</span><span>04 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 5 · 핵심 개념 5가지 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top">
+      <span>5 concepts you learn by building</span>
+      <span>05 / 06</span>
+    </div>
+    <div class="head">
+      <div>
+        <h2>핵심 개념 5가지.</h2>
+        <div class="h-lead">만들면서 손으로 익히는 *AI 시대 기본기*.</div>
+      </div>
+      <div>
+        <div class="big-num">05</div>
+        <div class="big-cap">Core</div>
+      </div>
+    </div>
+    <div class="concepts">
+      <div class="concept-item">
+        <div class="num">01</div>
+        <div class="body">
+          <div class="t">음성 → 글 (STT)</div>
+          <div class="d">사람 말 소리 → 텍스트. 외국 영상에 자막 자동 다는 것과 같은 원리. 우리는 *로컬에서* 한다.</div>
+        </div>
+      </div>
+      <div class="concept-item">
+        <div class="num">02</div>
+        <div class="body">
+          <div class="t">로컬 AI vs 클라우드 AI</div>
+          <div class="d">민감 데이터(회의)는 로컬, 일반 요약은 클라우드. *둘을 영리하게 섞는 게* 실무 패턴.</div>
+        </div>
+      </div>
+      <div class="concept-item">
+        <div class="num">03</div>
+        <div class="body">
+          <div class="t">JSON 강제 — 형식 명령</div>
+          <div class="d">AI에게 *자유 작문* 시키면 들쭉날쭉. *빈칸 양식*을 강제하면 데이터로 자동 변환 가능.</div>
+        </div>
+      </div>
+      <div class="concept-item">
+        <div class="num">04</div>
+        <div class="body">
+          <div class="t">템플릿 + 데이터</div>
+          <div class="d">"제목: {title}" + {title:"주간"} = "제목: 주간". 같은 모양에 데이터만 갈아끼우는 패턴.</div>
+        </div>
+      </div>
+      <div class="concept-item">
+        <div class="num">05</div>
+        <div class="body">
+          <div class="t">subprocess — 도구 조립</div>
+          <div class="d">Python에서 다른 도구(claude CLI)를 부르는 *접착제*. 작은 도구들을 묶어 큰 자동화를 만든다.</div>
+        </div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ① · Concept</span><span>05 / 06</span></div>
+  </div>
+</section>
+
+<!-- Slide 6 · Wrap / 응용 -->
+<section class="slide content">
+  <div class="frame">
+    <div class="meta-top">
+      <span>What you can do tomorrow</span>
+      <span>06 / 06</span>
+    </div>
+    <div class="head">
+      <div>
+        <h2>내일부터 어떻게 써요?</h2>
+        <div class="h-lead">*출력 단*만 갈아끼우면 즉시 실무 도구. **30일 로드맵 Week 1 미션**.</div>
+      </div>
+      <div>
+        <div class="big-num">04</div>
+        <div class="big-cap">실무 응용</div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="role">+ Slack</div>
+        <div class="name">팀 채널 자동 발송</div>
+        <div class="note">회의 끝나고 5초 후 #weekly 채널에 요약 도착. 팀 전체가 같은 페이지에.</div>
+      </div>
+      <div class="card">
+        <div class="role">+ Notion</div>
+        <div class="name">사내 위키 자동 등재</div>
+        <div class="note">회의록이 사내 Notion에 영구 저장. 신입도 과거 모든 회의 검색 가능.</div>
+      </div>
+      <div class="card">
+        <div class="role">+ Gmail</div>
+        <div class="name">메일 초안 자동 생성</div>
+        <div class="note">다음 회의 안내 메일이 초안함에 미리 와있음. 사람은 *검수만* 한다.</div>
+      </div>
+      <div class="card dark">
+        <div class="role">+ Calendar</div>
+        <div class="name">액션 → 일정 자동 등록</div>
+        <div class="note">"5월 27일까지 ROI 분석" → 캘린더에 마감 알림이 자동으로.</div>
+      </div>
+      <div class="card">
+        <div class="role">실습 모드</div>
+        <div class="name">MCP 서버 없음 · 완전 로컬</div>
+        <div class="note">세 프로젝트 중 *가장 단순한 시작점*. 환경 세팅 검증용.</div>
+      </div>
+      <div class="card">
+        <div class="role">Next</div>
+        <div class="name">Project ② 카드뉴스</div>
+        <div class="note">이제 *MCP 서버*를 처음으로 도입합니다. Firecrawl로 URL → 카드 5장.</div>
+      </div>
+    </div>
+    <div class="meta-bot"><span>Project ① · Concept</span><span>06 / 06</span></div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
